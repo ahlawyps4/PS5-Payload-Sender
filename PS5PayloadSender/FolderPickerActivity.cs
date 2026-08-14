@@ -5,15 +5,18 @@ using Android.OS;
 
 namespace PS5PayloadSender;
 
-[Activity(Theme = "@android:style/Theme.Material.Light.NoActionBar", NoHistory = true)]
+[Activity(Theme = "@android:style/Theme.Material.Light.NoActionBar")]
 public class FolderPickerActivity : Activity
 {
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-        var intent = new Intent(Intent.ActionOpenDocumentTree);
-        intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.GrantPersistableUriPermission);
-        StartActivityForResult(intent, 1001);
+        Handler.MainHandler.Post(() =>
+        {
+            var intent = new Intent(Intent.ActionOpenDocumentTree);
+            intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.GrantPersistableUriPermission);
+            StartActivityForResult(intent, 1001);
+        });
     }
 
     protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
@@ -22,6 +25,11 @@ public class FolderPickerActivity : Activity
 
         if (requestCode == 1001 && resultCode == Result.Ok && data?.Data != null)
         {
+            try
+            {
+                ContentResolver!.TakePersistableUriPermission(data.Data, ActivityFlags.GrantReadUriPermission);
+            }
+            catch { }
             FolderPickerCallback.Instance.SetUriResult(data.Data.ToString());
         }
         else

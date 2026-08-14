@@ -324,7 +324,11 @@ public partial class FtpPage : ContentPage
 
     private async void OnUploadFolderClicked(object? sender, EventArgs e)
     {
-        if (!_connected) return;
+        if (!_connected)
+        {
+            await DisplayAlert("تنبيه", "اتصل بالـ PS5 أولاً قبل الرفع", "OK");
+            return;
+        }
 
 #if ANDROID
         var tcs = new TaskCompletionSource<string?>();
