@@ -6,7 +6,7 @@
              BackgroundColor="#0A0A0A">
 
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="12">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="12">
 
             <!-- Developer Info -->
             <Border Grid.Row="0"
@@ -69,8 +69,28 @@
                 </Grid>
             </Border>
 
-            <!-- File Picker -->
+            <!-- Bundled Payloads -->
             <Border Grid.Row="3"
+                    BackgroundColor="#151515"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="16"
+                    Stroke="#FFD700"
+                    StrokeThickness="1">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="&#128230; الحمولات المدمجة في التطبيق"
+                           FontSize="13"
+                           TextColor="#FFD700" />
+                    <Picker x:Name="pickerBundled"
+                            Title="اختر حمولة من القائمة..."
+                            BackgroundColor="#0A0A0A"
+                            TextColor="#FFD700"
+                            TitleColor="#B8860B"
+                            SelectedIndexChanged="OnBundledSelected" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- File Picker -->
+            <Border Grid.Row="4"
                     BackgroundColor="#151515"
                     StrokeShape="RoundRectangle 12"
                     Padding="16"
@@ -103,7 +123,7 @@
             </Border>
 
             <!-- Send Button -->
-            <Button Grid.Row="4"
+            <Button Grid.Row="5"
                     x:Name="btnSend"
                     Text="&#9654; إرسال الحمولة (منفذ 9021)"
                     BackgroundColor="#FFD700"
@@ -115,7 +135,7 @@
                     Clicked="OnSendClicked" />
 
             <!-- Log -->
-            <Border Grid.Row="5"
+            <Border Grid.Row="6"
                     BackgroundColor="#0D0D0D"
                     StrokeShape="RoundRectangle 12"
                     Padding="12"
