@@ -23,6 +23,11 @@
             Icon="{OnPlatform Android='tab_ftp.png'}"
             ContentTemplate="{DataTemplate local:FtpPage}"
             Route="FtpPage" />
+        <ShellContent
+            Title="حول"
+            Icon="{OnPlatform Android='tab_about.png'}"
+            ContentTemplate="{DataTemplate local:AboutPage}"
+            Route="AboutPage" />
     </TabBar>
 
 </Shell>
