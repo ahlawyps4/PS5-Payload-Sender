@@ -47,7 +47,7 @@
                 StrokeThickness="1">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="8">
                 <VerticalStackLayout Grid.Column="0" Spacing="2">
-                    <Label Text="IP & المنفذ" FontSize="11" TextColor="#FFD700" />
+                    <Label Text="IP &amp; المنفذ" FontSize="11" TextColor="#FFD700" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
                         <Entry x:Name="txtFtpIp"
                                Text="192.168.1.100"
