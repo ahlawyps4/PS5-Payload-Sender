@@ -64,7 +64,7 @@ public static class ThemeService
         }
         else if (element is ProgressBar pb)
         {
-            pb.ProgressColor = new SolidColorBrush(accent);
+            pb.ProgressColor = accent;
         }
 
         if (element is IVisualTreeElement vte)
