@@ -21,7 +21,7 @@
                 StrokeShape="RoundRectangle 12"
                 Padding="12"
                 Stroke="Transparent">
-            <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="8">
                 <VerticalStackLayout Grid.Column="0" Spacing="2">
                     <Label Text="IP &amp; المنفذ" FontSize="11" TextColor="LightGray" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
@@ -56,7 +56,7 @@
 
                 <Button Grid.Column="2"
                         x:Name="btnUpload"
-                        Text="رفع ↑"
+                        Text="رفع ملف ↑"
                         BackgroundColor="#4285F4"
                         TextColor="White"
                         FontAttributes="Bold"
@@ -67,6 +67,18 @@
                         Clicked="OnUploadClicked" />
 
                 <Button Grid.Column="3"
+                        x:Name="btnUploadFolder"
+                        Text="رفع فلدر ↑↑"
+                        BackgroundColor="#9333EA"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        CornerRadius="8"
+                        HeightRequest="42"
+                        IsEnabled="False"
+                        Clicked="OnUploadFolderClicked" />
+
+                <Button Grid.Column="4"
                         x:Name="btnDownload"
                         Text="تحميل ↓"
                         BackgroundColor="#EAB308"

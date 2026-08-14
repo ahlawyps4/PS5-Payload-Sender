@@ -60,6 +60,7 @@ public partial class FtpPage : ContentPage
             btnConnect.Text = "قطع";
             btnConnect.BackgroundColor = Colors.Red;
             btnUpload.IsEnabled = true;
+            btnUploadFolder.IsEnabled = true;
             btnDownload.IsEnabled = true;
             btnUp.IsEnabled = true;
             btnRefresh.IsEnabled = true;
@@ -95,6 +96,7 @@ public partial class FtpPage : ContentPage
         btnConnect.Text = "اتصال";
         btnConnect.BackgroundColor = Color.FromArgb("#34A853");
         btnUpload.IsEnabled = false;
+        btnUploadFolder.IsEnabled = false;
         btnDownload.IsEnabled = false;
         btnUp.IsEnabled = false;
         btnRefresh.IsEnabled = false;
@@ -187,7 +189,6 @@ public partial class FtpPage : ContentPage
 
             await ReadResponse();
 
-            // Add parent dir
             if (_currentPath != "/")
             {
                 _items.Add(new FtpItem
@@ -320,6 +321,132 @@ public partial class FtpPage : ContentPage
         {
             await DisplayAlert("خطأ", $"خطأ في الرفع: {ex.Message}", "OK");
         }
+    }
+
+    private async void OnUploadFolderClicked(object? sender, EventArgs e)
+    {
+        if (!_connected) return;
+
+        var tcs = new TaskCompletionSource<string?>();
+        FolderPickerCallback.Instance.SetResult(tcs);
+
+        var intent = new Intent(Platform.CurrentActivity, typeof(FolderPickerActivity));
+        Platform.CurrentActivity!.StartActivity(intent);
+
+        string? treeUri = await tcs.Task;
+        if (treeUri == null) return;
+
+        var uri = Android.Net.Uri.Parse(treeUri);
+        if (uri == null) return;
+
+        string folderName = GetFolderName(Platform.CurrentActivity!, uri) ?? "folder";
+        string remoteDirPath = _currentPath.TrimEnd('/') + "/" + folderName;
+
+        try { await SendPasvCmd($"MKD {remoteDirPath}"); } catch { }
+
+        var files = GetFilesInTree(Platform.CurrentActivity!, uri);
+        if (files.Count == 0)
+        {
+            await DisplayAlert("تنبيه", "الفلدر فارغ!", "OK");
+            return;
+        }
+
+        lblStatus.Text = $"جاري رفع {files.Count} ملف...";
+        lblStatus.TextColor = Colors.Yellow;
+
+        int success = 0;
+        int failed = 0;
+
+        foreach (var fileInfo in files)
+        {
+            try
+            {
+                string remotePath = remoteDirPath + "/" + fileInfo.Name;
+
+                string pv = await SendPasvCmd("PASV");
+                var pi = ParsePsv(pv);
+                if (pi == null) { failed++; continue; }
+
+                using var dc = new TcpClient();
+                await dc.ConnectAsync(pi.Value.ip, pi.Value.port);
+                await SendPasvCmd($"STOR {remotePath}");
+
+                using var ds = dc.GetStream();
+                using var stream = Platform.CurrentActivity!.ContentResolver.OpenInputStream(fileInfo.Uri);
+                if (stream != null)
+                    await stream.CopyToAsync(ds);
+
+                await ReadResponse();
+                success++;
+            }
+            catch
+            {
+                failed++;
+            }
+        }
+
+        await DisplayAlert("اكتمل", $"تم رفع {success} ملف" + (failed > 0 ? $"\n{failed} ملف فشل" : ""), "OK");
+        lblStatus.Text = $"● متصل  •  {_items.Count} عنصر";
+        lblStatus.TextColor = Colors.LimeGreen;
+        await LoadDirectory();
+    }
+
+    private string? GetFolderName(Android.Content.Context context, Android.Net.Uri treeUri)
+    {
+        try
+        {
+            var cursor = context.ContentResolver.Query(treeUri, null, null, null, null);
+            if (cursor != null && cursor.MoveToFirst())
+            {
+                int nameIndex = cursor.GetColumnIndex(DocumentsContract.ColumnDocumentId);
+                if (nameIndex >= 0)
+                {
+                    string docId = cursor.GetString(nameIndex) ?? "";
+                    cursor.Close();
+                    string[] parts = docId.Split(':');
+                    return parts.Length > 1 ? parts[^1] : docId;
+                }
+                cursor.Close();
+            }
+        }
+        catch { }
+        return "folder";
+    }
+
+    private List<(Android.Net.Uri Uri, string Name)> GetFilesInTree(Android.Content.Context context, Android.Net.Uri treeUri)
+    {
+        var result = new List<(Android.Net.Uri, string)>();
+        try
+        {
+            var childrenUri = DocumentsContract.BuildChildDocumentsUriUsingTree(treeUri, DocumentsContract.GetTreeDocumentId(treeUri));
+            var cursor = context.ContentResolver.Query(childrenUri,
+                new[] { DocumentsContract.ColumnDocumentId, DocumentsContract.ColumnDisplayName, DocumentsContract.ColumnMimeType },
+                null, null, null);
+
+            if (cursor != null)
+            {
+                while (cursor.MoveToNext())
+                {
+                    string docId = cursor.GetString(0) ?? "";
+                    string name = cursor.GetString(1) ?? "";
+                    string mimeType = cursor.GetString(2) ?? "";
+
+                    if (mimeType.Contains("vnd.android.document/directory"))
+                    {
+                        var subUri = DocumentsContract.BuildDocumentUriUsingTree(treeUri, docId);
+                        result.AddRange(GetFilesInTree(context, subUri));
+                    }
+                    else
+                    {
+                        var fileUri = DocumentsContract.BuildDocumentUriUsingTree(treeUri, docId);
+                        result.Add((fileUri, name));
+                    }
+                }
+                cursor.Close();
+            }
+        }
+        catch { }
+        return result;
     }
 
     private async void OnDownloadClicked(object? sender, EventArgs e)
