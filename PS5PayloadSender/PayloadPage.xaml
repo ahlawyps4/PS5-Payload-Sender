@@ -54,8 +54,7 @@
                                TextColor="#FFD700"
                                BackgroundColor="#0A0A0A"
                                HorizontalTextAlignment="Center"
-                               PlaceholderColor="#666"
-                               TextColor="#FFD700" />
+                               PlaceholderColor="#666" />
                     </VerticalStackLayout>
                     <VerticalStackLayout Grid.Column="1" Spacing="4" WidthRequest="80">
                         <Label Text="المنفذ" FontSize="13" TextColor="#FFD700" HorizontalTextAlignment="Center" />
