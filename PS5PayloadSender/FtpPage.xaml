@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PS5PayloadSender.FtpPage"
+             Title="متصفح FTP"
+             BackgroundColor="#1a1a2e">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="16" RowSpacing="8">
+
+        <!-- Title -->
+        <Label Grid.Row="0"
+               Text="FTP متصفح الملفات"
+               FontSize="22"
+               FontAttributes="Bold"
+               TextColor="#4285F4" />
+
+        <!-- Connection -->
+        <Border Grid.Row="1"
+                BackgroundColor="#232330"
+                StrokeShape="RoundRectangle 12"
+                Padding="12"
+                Stroke="Transparent">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="IP & المنفذ" FontSize="11" TextColor="LightGray" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
+                        <Entry x:Name="txtFtpIp"
+                               Text="192.168.1.100"
+                               FontSize="14"
+                               TextColor="White"
+                               BackgroundColor="#2d2d3c"
+                               HorizontalTextAlignment="Center" />
+                        <Entry Grid.Column="1"
+                               x:Name="txtFtpPort"
+                               Text="2121"
+                               FontSize="14"
+                               TextColor="White"
+                               BackgroundColor="#2d2d3c"
+                               HorizontalTextAlignment="Center"
+                               Keyboard="Numeric"
+                               WidthRequest="55" />
+                    </Grid>
+                </VerticalStackLayout>
+
+                <Button Grid.Column="1"
+                        x:Name="btnConnect"
+                        Text="اتصال"
+                        BackgroundColor="#34A853"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        CornerRadius="8"
+                        HeightRequest="42"
+                        Clicked="OnConnectClicked" />
+
+                <Button Grid.Column="2"
+                        x:Name="btnUpload"
+                        Text="رفع ↑"
+                        BackgroundColor="#4285F4"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        CornerRadius="8"
+                        HeightRequest="42"
+                        IsEnabled="False"
+                        Clicked="OnUploadClicked" />
+
+                <Button Grid.Column="3"
+                        x:Name="btnDownload"
+                        Text="تحميل ↓"
+                        BackgroundColor="#EAB308"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        CornerRadius="8"
+                        HeightRequest="42"
+                        IsEnabled="False"
+                        Clicked="OnDownloadClicked" />
+            </Grid>
+        </Border>
+
+        <!-- Path -->
+        <Border Grid.Row="2"
+                BackgroundColor="#232330"
+                StrokeShape="RoundRectangle 12"
+                Padding="8"
+                Stroke="Transparent">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
+                <Button Grid.Column="0"
+                        x:Name="btnUp"
+                        Text="⬆"
+                        BackgroundColor="#666680"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="8"
+                        WidthRequest="36"
+                        HeightRequest="32"
+                        IsEnabled="False"
+                        Clicked="OnUpClicked" />
+                <Entry Grid.Column="1"
+                       x:Name="txtPath"
+                       Text="/"
+                       FontSize="13"
+                       TextColor="White"
+                       BackgroundColor="#2d2d3c"
+                       HorizontalTextAlignment="Center" />
+                <Button Grid.Column="2"
+                        x:Name="btnRefresh"
+                        Text="↻"
+                        BackgroundColor="#666680"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="8"
+                        WidthRequest="36"
+                        HeightRequest="32"
+                        IsEnabled="False"
+                        Clicked="OnRefreshClicked" />
+            </Grid>
+        </Border>
+
+        <!-- File List -->
+        <CollectionView Grid.Row="3"
+                        x:Name="cvFiles"
+                        SelectionMode="Single"
+                        SelectionChanged="OnFileSelected"
+                        ItemsLayout="VerticalList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:FtpItem">
+                    <Border BackgroundColor="#1e1e2e"
+                            StrokeShape="RoundRectangle 8"
+                            Padding="12"
+                            Stroke="Transparent"
+                            Margin="0,2">
+                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                            <Label Grid.Column="0"
+                                   Text="{Binding Icon}"
+                                   FontSize="22"
+                                   VerticalTextAlignment="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalTextAlignment="Center">
+                                <Label Text="{Binding Name}"
+                                       FontSize="14"
+                                       TextColor="White"
+                                       FontAttributes="Bold"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Info}"
+                                       FontSize="11"
+                                       TextColor="Gray" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="2"
+                                   Text="{Binding SizeText}"
+                                   FontSize="12"
+                                   TextColor="LightGray"
+                                   VerticalTextAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="4"
+                BackgroundColor="#232330"
+                StrokeShape="RoundRectangle 8"
+                Padding="10"
+                Stroke="Transparent">
+            <Label x:Name="lblStatus"
+                   Text="غير متصل"
+                   FontSize="12"
+                   TextColor="Gray"
+                   HorizontalTextAlignment="Center" />
+        </Border>
+
+    </Grid>
+
+</ContentPage>

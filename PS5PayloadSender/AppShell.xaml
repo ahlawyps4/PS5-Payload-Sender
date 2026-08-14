@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="PS5PayloadSender.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:PS5PayloadSender"
+    Title="PS5 Payload Sender"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="#1a1a2e"
+    Shell.TabBarUnselectedColor="#888888"
+    Shell.TabBarForegroundColor="#4285F4"
+    Shell.BackgroundColor="#1a1a2e"
+    Shell.ForegroundColor="White">
+
+    <TabBar>
+        <ShellContent
+            Title="إرسال"
+            Icon="{OnPlatform Android='tab_sender.png'}"
+            ContentTemplate="{DataTemplate local:PayloadPage}"
+            Route="PayloadPage" />
+        <ShellContent
+            Title="FTP"
+            Icon="{OnPlatform Android='tab_ftp.png'}"
+            ContentTemplate="{DataTemplate local:FtpPage}"
+            Route="FtpPage" />
+    </TabBar>
+
+</Shell>

@@ -1,0 +1,37 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Install MAUI workload
+      run: dotnet workload install maui-android
+
+    - name: Restore dependencies
+      run: dotnet restore PS5PayloadSender/PS5PayloadSender.csproj -f:net10.0-android
+
+    - name: Build APK (Release)
+      run: dotnet build PS5PayloadSender/PS5PayloadSender.csproj -f:net10.0-android -c Release -o ./output
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: PS5PayloadSender-APK
+        path: ./output/**/*.apk
+        if-no-files-found: warn

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PS5PayloadSender.PayloadPage"
+             Title="إرسال الحمولة"
+             BackgroundColor="#1a1a2e">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="12">
+
+            <!-- Title -->
+            <Label Grid.Row="0"
+                   Text="► إرسال الحمولة (Payload)"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#4285F4" />
+
+            <!-- IP & Port -->
+            <Border Grid.Row="1"
+                    BackgroundColor="#232330"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="16"
+                    Stroke="Transparent">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label Text="عنوان IP للجهاز" FontSize="13" TextColor="LightGray" />
+                        <Entry x:Name="txtIp"
+                               Text="192.168.1.100"
+                               FontSize="18"
+                               TextColor="White"
+                               BackgroundColor="#2d2d3c"
+                               HorizontalTextAlignment="Center"
+                               PlaceholderColor="Gray" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" WidthRequest="80">
+                        <Label Text="المنفذ" FontSize="13" TextColor="LightGray" HorizontalTextAlignment="Center" />
+                        <Entry x:Name="txtPort"
+                               Text="9021"
+                               FontSize="18"
+                               TextColor="White"
+                               BackgroundColor="#2d2d3c"
+                               HorizontalTextAlignment="Center"
+                               Keyboard="Numeric" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- File Picker -->
+            <Border Grid.Row="2"
+                    BackgroundColor="#232330"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="16"
+                    Stroke="Transparent">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label Text="ملف الحمولة المخصصة (Payload File)" FontSize="13" TextColor="LightGray" />
+                        <Label x:Name="lblFileName"
+                               Text="لم يتم اختيار ملف"
+                               FontSize="14"
+                               TextColor="Gray"
+                               LineBreakMode="TailTruncation" />
+                        <Label x:Name="lblFileSize"
+                               Text=""
+                               FontSize="11"
+                               TextColor="DarkGray" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1"
+                            x:Name="btnBrowse"
+                            Text="استعراض"
+                            BackgroundColor="#4285F4"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="8"
+                            WidthRequest="90"
+                            HeightRequest="40"
+                            Clicked="OnBrowseClicked" />
+                </Grid>
+            </Border>
+
+            <!-- Send Button -->
+            <Button Grid.Row="3"
+                    x:Name="btnSend"
+                    Text="► إرسال الحمولة (منفذ 9021)"
+                    BackgroundColor="#4285F4"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="12"
+                    HeightRequest="52"
+                    Clicked="OnSendClicked" />
+
+            <!-- Log -->
+            <Border Grid.Row="4"
+                    BackgroundColor="#12121c"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="12"
+                    Stroke="Transparent"
+                    HeightRequest="280">
+                <Grid RowDefinitions="Auto,*">
+                    <Label Grid.Row="0"
+                           Text="سجل الإرسال (Console Output)"
+                           FontSize="13"
+                           TextColor="LightGray"
+                           Margin="0,0,0,8" />
+                    <CollectionView Grid.Row="1"
+                                    x:Name="cvLog"
+                                    ItemsLayout="VerticalList"
+                                    SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Label Text="{Binding .}"
+                                       FontFamily="Courier New"
+                                       FontSize="12"
+                                       TextColor="#90EE90"
+                                       Margin="0,1" />
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

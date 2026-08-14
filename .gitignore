@@ -1,0 +1,30 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+## MAUI
+*.apk
+*.aab
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## IDE
+.vs/
+.vscode/
+.idea/
+*.sln.DotSettings.user
+
+## OS
+Thumbs.db
+.DS_Store
+
+## Build
+output/
+PublishProfiles/
