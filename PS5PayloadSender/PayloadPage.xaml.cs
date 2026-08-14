@@ -12,6 +12,17 @@ public partial class PayloadPage : ContentPage
     {
         InitializeComponent();
         cvLog.ItemsSource = _logLines;
+
+        txtIp.Text = Preferences.Get("payload_ip", "192.168.1.100");
+        txtPort.Text = Preferences.Get("payload_port", "9021");
+        txtIp.TextChanged += (s, e) => Preferences.Set("payload_ip", txtIp.Text ?? "");
+        txtPort.TextChanged += (s, e) => Preferences.Set("payload_port", txtPort.Text ?? "");
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ThemeService.Apply(this);
     }
 
     private async void OnBrowseClicked(object? sender, EventArgs e)

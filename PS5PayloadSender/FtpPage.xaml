@@ -6,7 +6,7 @@
              Title="متصفح FTP"
              BackgroundColor="#0A0A0A">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Padding="16" RowSpacing="8">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto" Padding="16" RowSpacing="8">
 
         <!-- Developer Info -->
         <Border Grid.Row="0"
@@ -156,8 +156,58 @@
             </Grid>
         </Border>
 
+        <!-- File Operations -->
+        <Border Grid.Row="4"
+                BackgroundColor="#151515"
+                StrokeShape="RoundRectangle 12"
+                Padding="8"
+                Stroke="#FFD700"
+                StrokeThickness="1">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="6">
+                <Button Grid.Column="0"
+                        x:Name="btnMkdir"
+                        Text="&#128193;"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
+                        FontSize="14"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="34"
+                        IsEnabled="False"
+                        Clicked="OnMkdirClicked" />
+                <Label Grid.Column="1"
+                       Text="إنشاء / حذف / إعادة تسمية"
+                       FontSize="12"
+                       TextColor="#B8860B"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Center" />
+                <Button Grid.Column="2"
+                        x:Name="btnDelete"
+                        Text="&#128465;"
+                        BackgroundColor="#FF6B6B"
+                        TextColor="White"
+                        FontSize="14"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="34"
+                        IsEnabled="False"
+                        Clicked="OnDeleteClicked" />
+                <Button Grid.Column="3"
+                        x:Name="btnRename"
+                        Text="&#9999;"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
+                        FontSize="14"
+                        CornerRadius="8"
+                        WidthRequest="40"
+                        HeightRequest="34"
+                        IsEnabled="False"
+                        Clicked="OnRenameClicked" />
+            </Grid>
+        </Border>
+
         <!-- File List -->
-        <CollectionView Grid.Row="4"
+        <CollectionView Grid.Row="5"
                         x:Name="cvFiles"
                         SelectionMode="Single"
                         SelectionChanged="OnFileSelected"
@@ -197,17 +247,31 @@
         </CollectionView>
 
         <!-- Status Bar -->
-        <Border Grid.Row="5"
+        <Border Grid.Row="6"
                 BackgroundColor="#151515"
                 StrokeShape="RoundRectangle 8"
                 Padding="10"
                 Stroke="#333"
                 StrokeThickness="1">
-            <Label x:Name="lblStatus"
-                   Text="غير متصل"
-                   FontSize="12"
-                   TextColor="#B8860B"
-                   HorizontalTextAlignment="Center" />
+            <VerticalStackLayout Spacing="6">
+                <Label x:Name="lblStatus"
+                       Text="غير متصل"
+                       FontSize="12"
+                       TextColor="#B8860B"
+                       HorizontalTextAlignment="Center" />
+                <ProgressBar x:Name="progTransfer"
+                             Progress="0"
+                             ProgressColor="#FFD700"
+                             BackgroundColor="#333"
+                             HeightRequest="6"
+                             IsVisible="False" />
+                <Label x:Name="lblProgress"
+                       Text=""
+                       FontSize="11"
+                       TextColor="#FFD700"
+                       HorizontalTextAlignment="Center"
+                       IsVisible="False" />
+            </VerticalStackLayout>
         </Border>
 
     </Grid>

@@ -32,6 +32,17 @@ public partial class FtpPage : ContentPage
     {
         InitializeComponent();
         cvFiles.ItemsSource = _items;
+
+        txtFtpIp.Text = Preferences.Get("ftp_ip", "192.168.1.100");
+        txtFtpPort.Text = Preferences.Get("ftp_port", "2121");
+        txtFtpIp.TextChanged += (s, e) => Preferences.Set("ftp_ip", txtFtpIp.Text ?? "");
+        txtFtpPort.TextChanged += (s, e) => Preferences.Set("ftp_port", txtFtpPort.Text ?? "");
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        ThemeService.Apply(this);
     }
 
     private async void OnConnectClicked(object? sender, EventArgs e)
@@ -66,6 +77,9 @@ public partial class FtpPage : ContentPage
             btnConnect.BackgroundColor = Colors.Red;
             btnUp.IsEnabled = true;
             btnRefresh.IsEnabled = true;
+            btnMkdir.IsEnabled = true;
+            btnDelete.IsEnabled = true;
+            btnRename.IsEnabled = true;
 
             _currentPath = "/";
             txtPath.Text = "/";
@@ -99,6 +113,13 @@ public partial class FtpPage : ContentPage
         btnConnect.BackgroundColor = Color.FromArgb("#34A853");
         btnUp.IsEnabled = false;
         btnRefresh.IsEnabled = false;
+        btnMkdir.IsEnabled = false;
+        btnDelete.IsEnabled = false;
+        btnRename.IsEnabled = false;
+        progTransfer.IsVisible = false;
+        progTransfer.Progress = 0;
+        lblProgress.IsVisible = false;
+        lblProgress.Text = "";
         _items.Clear();
     }
 
@@ -287,6 +308,93 @@ public partial class FtpPage : ContentPage
         await LoadDirectory();
     }
 
+    private async void OnMkdirClicked(object? sender, EventArgs e)
+    {
+        if (!_connected) return;
+        string name = await DisplayPromptAsync("مجلد جديد", "أدخل اسم المجلد:", "إنشاء", "إلغاء");
+        if (string.IsNullOrWhiteSpace(name)) return;
+        try
+        {
+            string resp = await SendCmd($"MKD {_currentPath.TrimEnd('/')}/{name}");
+            await DisplayAlert("النتيجة", resp, "OK");
+            await LoadDirectory();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("خطأ", ex.Message, "OK");
+        }
+    }
+
+    private async void OnDeleteClicked(object? sender, EventArgs e)
+    {
+        if (!_connected) return;
+        if (cvFiles.SelectedItem is not FtpItem item || item.Name == "..")
+        {
+            await DisplayAlert("تنبيه", "اختر ملفاً أو مجلداً أولاً", "OK");
+            return;
+        }
+        bool ok = await DisplayAlert("تأكيد الحذف", $"حذف '{item.Name}'؟", "حذف", "إلغاء");
+        if (!ok) return;
+        try
+        {
+            string remotePath = _currentPath.TrimEnd('/') + "/" + item.Name;
+            string cmd = item.IsDirectory ? "RMD" : "DELE";
+            string resp = await SendCmd($"{cmd} {remotePath}");
+            await DisplayAlert("النتيجة", resp, "OK");
+            await LoadDirectory();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("خطأ", ex.Message, "OK");
+        }
+    }
+
+    private async void OnRenameClicked(object? sender, EventArgs e)
+    {
+        if (!_connected) return;
+        if (cvFiles.SelectedItem is not FtpItem item || item.Name == "..")
+        {
+            await DisplayAlert("تنبيه", "اختر ملفاً أو مجلداً أولاً", "OK");
+            return;
+        }
+        string newName = await DisplayPromptAsync("إعادة تسمية", "الاسم الجديد:", "تسمية", "إلغاء", initialValue: item.Name);
+        if (string.IsNullOrWhiteSpace(newName) || newName == item.Name) return;
+        try
+        {
+            string basePath = _currentPath.TrimEnd('/');
+            await SendCmd($"RNFR {basePath}/{item.Name}");
+            string resp = await SendCmd($"RNTO {basePath}/{newName}");
+            await DisplayAlert("النتيجة", resp, "OK");
+            await LoadDirectory();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("خطأ", ex.Message, "OK");
+        }
+    }
+
+    private void ShowProgress(string label, double progress)
+    {
+        Dispatcher.Dispatch(() =>
+        {
+            progTransfer.IsVisible = true;
+            lblProgress.IsVisible = true;
+            lblStatus.Text = label;
+            progTransfer.Progress = progress;
+            lblProgress.Text = $"{progress * 100:0}%";
+        });
+    }
+
+    private void HideProgress()
+    {
+        Dispatcher.Dispatch(() =>
+        {
+            progTransfer.IsVisible = false;
+            lblProgress.IsVisible = false;
+            lblProgress.Text = "";
+        });
+    }
+
     private async void OnUploadClicked(object? sender, EventArgs e)
     {
         if (!_connected) return;
@@ -310,7 +418,18 @@ public partial class FtpPage : ContentPage
 
             using var dataStream = dataClient.GetStream();
             using var fileStream = File.OpenRead(result.FullPath);
-            await fileStream.CopyToAsync(dataStream);
+            long total = fileStream.Length;
+            long sent = 0;
+            byte[] buffer = new byte[65536];
+            int n;
+            ShowProgress("جاري رفع الملف...", 0);
+            while ((n = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            {
+                await dataStream.WriteAsync(buffer, 0, n);
+                sent += n;
+                ShowProgress("جاري رفع الملف...", total > 0 ? (double)sent / total : 1);
+            }
+            HideProgress();
             await ReadResponse();
 
             await DisplayAlert("نجاح", $"تم رفع '{fileName}' بنجاح!", "OK");
@@ -360,9 +479,11 @@ public partial class FtpPage : ContentPage
 
         int success = 0;
         int failed = 0;
+        int fileIndex = 0;
 
         foreach (var fileInfo in files)
         {
+            fileIndex++;
             try
             {
                 string remotePath = remoteDirPath + "/" + fileInfo.Name;
@@ -378,7 +499,19 @@ public partial class FtpPage : ContentPage
                 using var ds = dc.GetStream();
                 using var stream = Platform.CurrentActivity!.ContentResolver.OpenInputStream(fileInfo.Uri);
                 if (stream != null)
-                    await stream.CopyToAsync(ds);
+                {
+                    long fileLen = stream.Length > 0 ? stream.Length : 1;
+                    long sent = 0;
+                    byte[] buffer = new byte[65536];
+                    int n;
+                    while ((n = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        await ds.WriteAsync(buffer, 0, n);
+                        sent += n;
+                        double overall = (double)(fileIndex - 1) / files.Count + ((double)sent / fileLen) / files.Count;
+                        ShowProgress($"رفع {fileInfo.Name} ({fileIndex}/{files.Count})", overall);
+                    }
+                }
 
                 await ReadResponse();
                 success++;
@@ -388,6 +521,8 @@ public partial class FtpPage : ContentPage
                 failed++;
             }
         }
+
+        HideProgress();
 
         await DisplayAlert("اكتمل", $"تم رفع {success} ملف" + (failed > 0 ? $"\n{failed} ملف فشل" : ""), "OK");
         lblStatus.Text = $"● متصل  •  {_items.Count} عنصر";
@@ -482,8 +617,21 @@ public partial class FtpPage : ContentPage
 
             using var dataStream = dataClient.GetStream();
             string localPath = Path.Combine(FileSystem.CacheDirectory, item.Name);
+            long total = item.Size;
+            long received = 0;
+            byte[] buffer = new byte[65536];
+            int n;
+            ShowProgress("جاري تحميل الملف...", 0);
             using (var fs = File.Create(localPath))
-                await dataStream.CopyToAsync(fs);
+            {
+                while ((n = await dataStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                {
+                    await fs.WriteAsync(buffer, 0, n);
+                    received += n;
+                    ShowProgress("جاري تحميل الملف...", total > 0 ? (double)received / total : 1);
+                }
+            }
+            HideProgress();
 
             await ReadResponse();
 

@@ -6,7 +6,7 @@
              BackgroundColor="#0A0A0A">
 
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="14">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="14">
 
             <!-- App Identity -->
             <Border Grid.Row="0"
@@ -81,8 +81,20 @@
                     HeightRequest="50"
                     Clicked="OnCatalogClicked" />
 
+            <!-- Theme -->
+            <Button Grid.Row="5"
+                    x:Name="btnTheme"
+                    Text="&#127912; تغيير اللون"
+                    BackgroundColor="#FFD700"
+                    TextColor="#0A0A0A"
+                    FontSize="15"
+                    FontAttributes="Bold"
+                    CornerRadius="10"
+                    HeightRequest="50"
+                    Clicked="OnThemeClicked" />
+
             <!-- Footer -->
-            <Label Grid.Row="5"
+            <Label Grid.Row="6"
                    Text="جميع الحقوق محفوظة &#169; Ahlawy-Store"
                    FontSize="12"
                    TextColor="#666"
