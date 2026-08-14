@@ -31,10 +31,10 @@ public static class ThemeService
 
         if (Shell.Current != null)
         {
-            Shell.Current.TabBarBackgroundColor = Color.FromArgb("#0A0A0A");
-            Shell.Current.TabBarForegroundColor = Accent;
-            Shell.Current.TabBarUnselectedColor = AccentDim;
-            Shell.Current.ForegroundColor = Accent;
+            Shell.SetTabBarBackgroundColor(Shell.Current, Color.FromArgb("#0A0A0A"));
+            Shell.SetTabBarForegroundColor(Shell.Current, Accent);
+            Shell.SetTabBarUnselectedColor(Shell.Current, AccentDim);
+            Shell.SetForegroundColor(Shell.Current, Accent);
         }
     }
 
@@ -50,8 +50,8 @@ public static class ThemeService
         }
         else if (element is Border b)
         {
-            if (b.Stroke != null && IsGoldLike(b.Stroke))
-                b.Stroke = accent;
+            if (b.Stroke is SolidColorBrush sb && IsGoldLike(sb.Color))
+                b.Stroke = new SolidColorBrush(accent);
         }
         else if (element is Button btn)
         {
@@ -64,7 +64,7 @@ public static class ThemeService
         }
         else if (element is ProgressBar pb)
         {
-            pb.ProgressColor = accent;
+            pb.ProgressColor = new SolidColorBrush(accent);
         }
 
         if (element is IVisualTreeElement vte)
