@@ -408,7 +408,7 @@ public partial class FtpPage : ContentPage
             var cursor = context.ContentResolver.Query(treeUri, null, null, null, null);
             if (cursor != null && cursor.MoveToFirst())
             {
-                int nameIndex = cursor.GetColumnIndex(DocumentsContract.ColumnDocumentId);
+                int nameIndex = cursor.GetColumnIndex(DocumentsContract.Document.ColumnDocumentId);
                 if (nameIndex >= 0)
                 {
                     string docId = cursor.GetString(nameIndex) ?? "";
@@ -430,7 +430,7 @@ public partial class FtpPage : ContentPage
         {
             var childrenUri = DocumentsContract.BuildChildDocumentsUriUsingTree(treeUri, DocumentsContract.GetTreeDocumentId(treeUri));
             var cursor = context.ContentResolver.Query(childrenUri,
-                new[] { DocumentsContract.ColumnDocumentId, DocumentsContract.ColumnDisplayName, DocumentsContract.ColumnMimeType },
+                new[] { DocumentsContract.Document.ColumnDocumentId, DocumentsContract.Document.ColumnDisplayName, DocumentsContract.Document.ColumnMimeType },
                 null, null, null);
 
             if (cursor != null)
