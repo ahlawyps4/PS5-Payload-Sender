@@ -16,7 +16,7 @@
                 Stroke="#FFD700"
                 StrokeThickness="2">
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Label Text="����"
+                <Label Text="&#127986;"
                        FontSize="20"
                        VerticalTextAlignment="Center" />
                 <VerticalStackLayout Spacing="1">
@@ -24,7 +24,7 @@
                            FontSize="14"
                            FontAttributes="Bold"
                            TextColor="#FFD700" />
-                    <Label Text="���� 01018251103"
+                    <Label Text="&#128222; 01018251103"
                            FontSize="11"
                            TextColor="#B8860B" />
                 </VerticalStackLayout>
@@ -80,7 +80,7 @@
 
                 <Button Grid.Column="2"
                         x:Name="btnUpload"
-                        Text="رفع ملف ↑"
+                        Text="رفع ملف &#8593;"
                         BackgroundColor="#FFD700"
                         TextColor="#0A0A0A"
                         FontAttributes="Bold"
@@ -92,7 +92,7 @@
 
                 <Button Grid.Column="3"
                         x:Name="btnUploadFolder"
-                        Text="رفع فلدر ↑���"
+                        Text="رفع فلدر &#8593;&#8593;"
                         BackgroundColor="#FFD700"
                         TextColor="#0A0A0A"
                         FontAttributes="Bold"
@@ -104,7 +104,7 @@
 
                 <Button Grid.Column="4"
                         x:Name="btnDownload"
-                        Text="تحميل ��"
+                        Text="تحميل &#8595;"
                         BackgroundColor="#FFD700"
                         TextColor="#0A0A0A"
                         FontAttributes="Bold"
@@ -126,7 +126,7 @@
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
                 <Button Grid.Column="0"
                         x:Name="btnUp"
-                        Text="���"
+                        Text="&#11014;"
                         BackgroundColor="#FFD700"
                         TextColor="#0A0A0A"
                         FontSize="14"
@@ -144,7 +144,7 @@
                        HorizontalTextAlignment="Center" />
                 <Button Grid.Column="2"
                         x:Name="btnRefresh"
-                        Text="���"
+                        Text="&#8635;"
                         BackgroundColor="#FFD700"
                         TextColor="#0A0A0A"
                         FontSize="14"

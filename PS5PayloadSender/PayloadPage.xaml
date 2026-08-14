@@ -16,7 +16,7 @@
                     Stroke="#FFD700"
                     StrokeThickness="2">
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <Label Text="����"
+                    <Label Text="&#127986;"
                            FontSize="24"
                            VerticalTextAlignment="Center" />
                     <VerticalStackLayout Spacing="1">
@@ -24,7 +24,7 @@
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="#FFD700" />
-                        <Label Text="���� 01018251103"
+                        <Label Text="&#128222; 01018251103"
                                FontSize="12"
                                TextColor="#B8860B" />
                     </VerticalStackLayout>
@@ -33,7 +33,7 @@
 
             <!-- Title -->
             <Label Grid.Row="1"
-                   Text="�� إرسال الحمولة (Payload)"
+                   Text="&#9654; إرسال الحمولة (Payload)"
                    FontSize="22"
                    FontAttributes="Bold"
                    TextColor="#FFD700" />
@@ -105,7 +105,7 @@
             <!-- Send Button -->
             <Button Grid.Row="4"
                     x:Name="btnSend"
-                    Text="�� إرسال الحمولة (منفذ 9021)"
+                    Text="&#9654; إرسال الحمولة (منفذ 9021)"
                     BackgroundColor="#FFD700"
                     TextColor="#0A0A0A"
                     FontSize="16"
