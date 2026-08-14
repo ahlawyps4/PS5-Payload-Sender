@@ -33,32 +33,18 @@ jobs:
       run: |
         keytool -genkeypair -v -keystore ahlawy-store.keystore -alias ahlawy -keyalg RSA -keysize 2048 -validity 10000 -storepass ahlawy123 -keypass ahlawy123 -dname "CN=Ahlawy-Store, OU=Dev, O=Ahlawy-Store, L=Cairo, ST=Cairo, C=EG"
 
+    - name: Copy keystore to project
+      run: Copy-Item ahlawy-store.keystore PS5PayloadSender/ahlawy-store.keystore
+
     - name: Restore dependencies
       run: dotnet restore PS5PayloadSender/PS5PayloadSender.csproj
 
-    - name: Build APK (Release - Unsigned)
+    - name: Build APK (Release - Auto Signed)
       run: dotnet build PS5PayloadSender/PS5PayloadSender.csproj -f net10.0-android -c Release -o ./output
-
-    - name: Sign APK
-      run: |
-        jarsigner -keystore ahlawy-store.keystore -storepass ahlawy123 -keypass ahlawy123 -signedjar ./output/Ahlawy-Store-Signed.apk ./output/com.ahlawyps4.ps5payloadsender-Signed.apk ahlawy
-
-    - name: Zipalign APK
-      run: |
-        $zipalign = Join-Path $env:ANDROID_HOME "build-tools\*\zipalign.exe"
-        $zipalignPath = Get-ChildItem $zipalign | Select-Object -First 1
-        if ($zipalignPath) {
-            & $zipalignPath.FullName -f 4 ./output/Ahlawy-Store-Signed.apk ./output/Ahlawy-Store-Final.apk
-        } else {
-            Copy-Item ./output/Ahlawy-Store-Signed.apk ./output/Ahlawy-Store-Final.apk
-        }
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: Ahlawy-Store-APK
-        path: |
-          ./output/Ahlawy-Store-Final.apk
-          ./output/Ahlawy-Store-Signed.apk
-          ./output/com.ahlawyps4.ps5payloadsender-Signed.apk
+        path: ./output/**/*.apk
         if-no-files-found: warn
