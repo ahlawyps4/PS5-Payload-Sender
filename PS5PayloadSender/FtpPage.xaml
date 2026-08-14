@@ -4,29 +4,29 @@
              xmlns:local="clr-namespace:PS5PayloadSender"
              x:Class="PS5PayloadSender.FtpPage"
              Title="متصفح FTP"
-             BackgroundColor="#1a1a2e">
+             BackgroundColor="#0A0A0A">
 
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Padding="16" RowSpacing="8">
 
         <!-- Developer Info -->
         <Border Grid.Row="0"
-                BackgroundColor="#1e1e2e"
+                BackgroundColor="#151515"
                 StrokeShape="RoundRectangle 12"
                 Padding="10"
-                Stroke="#4285F4"
-                StrokeThickness="1">
+                Stroke="#FFD700"
+                StrokeThickness="2">
             <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                <Label Text="🏪"
-                       FontSize="18"
+                <Label Text="����"
+                       FontSize="20"
                        VerticalTextAlignment="Center" />
                 <VerticalStackLayout Spacing="1">
                     <Label Text="Ahlawy-Store"
                            FontSize="14"
                            FontAttributes="Bold"
-                           TextColor="#4285F4" />
-                    <Label Text="📞 01018251103"
+                           TextColor="#FFD700" />
+                    <Label Text="���� 01018251103"
                            FontSize="11"
-                           TextColor="LightGray" />
+                           TextColor="#B8860B" />
                 </VerticalStackLayout>
             </HorizontalStackLayout>
         </Border>
@@ -36,30 +36,31 @@
                Text="FTP متصفح الملفات"
                FontSize="22"
                FontAttributes="Bold"
-               TextColor="#4285F4" />
+               TextColor="#FFD700" />
 
         <!-- Connection -->
         <Border Grid.Row="2"
-                BackgroundColor="#232330"
+                BackgroundColor="#151515"
                 StrokeShape="RoundRectangle 12"
                 Padding="12"
-                Stroke="Transparent">
+                Stroke="#FFD700"
+                StrokeThickness="1">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="8">
                 <VerticalStackLayout Grid.Column="0" Spacing="2">
-                    <Label Text="IP &amp; المنفذ" FontSize="11" TextColor="LightGray" />
+                    <Label Text="IP & المنفذ" FontSize="11" TextColor="#FFD700" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
                         <Entry x:Name="txtFtpIp"
                                Text="192.168.1.100"
                                FontSize="14"
-                               TextColor="White"
-                               BackgroundColor="#2d2d3c"
+                               TextColor="#FFD700"
+                               BackgroundColor="#0A0A0A"
                                HorizontalTextAlignment="Center" />
                         <Entry Grid.Column="1"
                                x:Name="txtFtpPort"
                                Text="2121"
                                FontSize="14"
-                               TextColor="White"
-                               BackgroundColor="#2d2d3c"
+                               TextColor="#FFD700"
+                               BackgroundColor="#0A0A0A"
                                HorizontalTextAlignment="Center"
                                Keyboard="Numeric"
                                WidthRequest="55" />
@@ -69,8 +70,8 @@
                 <Button Grid.Column="1"
                         x:Name="btnConnect"
                         Text="اتصال"
-                        BackgroundColor="#34A853"
-                        TextColor="White"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
                         FontAttributes="Bold"
                         FontSize="13"
                         CornerRadius="8"
@@ -80,53 +81,54 @@
                 <Button Grid.Column="2"
                         x:Name="btnUpload"
                         Text="رفع ملف ↑"
-                        BackgroundColor="#4285F4"
-                        TextColor="White"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
                         FontAttributes="Bold"
                         FontSize="13"
                         CornerRadius="8"
                         HeightRequest="42"
-                        IsEnabled="False"
+                        IsEnabled="True"
                         Clicked="OnUploadClicked" />
 
                 <Button Grid.Column="3"
                         x:Name="btnUploadFolder"
-                        Text="رفع فلدر ↑↑"
-                        BackgroundColor="#9333EA"
-                        TextColor="White"
+                        Text="رفع فلدر ↑���"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
                         FontAttributes="Bold"
                         FontSize="13"
                         CornerRadius="8"
                         HeightRequest="42"
-                        IsEnabled="False"
+                        IsEnabled="True"
                         Clicked="OnUploadFolderClicked" />
 
                 <Button Grid.Column="4"
                         x:Name="btnDownload"
-                        Text="تحميل ↓"
-                        BackgroundColor="#EAB308"
-                        TextColor="White"
+                        Text="تحميل ��"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
                         FontAttributes="Bold"
                         FontSize="13"
                         CornerRadius="8"
                         HeightRequest="42"
-                        IsEnabled="False"
+                        IsEnabled="True"
                         Clicked="OnDownloadClicked" />
             </Grid>
         </Border>
 
         <!-- Path -->
         <Border Grid.Row="3"
-                BackgroundColor="#232330"
+                BackgroundColor="#151515"
                 StrokeShape="RoundRectangle 12"
                 Padding="8"
-                Stroke="Transparent">
+                Stroke="#FFD700"
+                StrokeThickness="1">
             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="6">
                 <Button Grid.Column="0"
                         x:Name="btnUp"
-                        Text="⬆"
-                        BackgroundColor="#666680"
-                        TextColor="White"
+                        Text="���"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
                         FontSize="14"
                         CornerRadius="8"
                         WidthRequest="36"
@@ -137,14 +139,14 @@
                        x:Name="txtPath"
                        Text="/"
                        FontSize="13"
-                       TextColor="White"
-                       BackgroundColor="#2d2d3c"
+                       TextColor="#FFD700"
+                       BackgroundColor="#0A0A0A"
                        HorizontalTextAlignment="Center" />
                 <Button Grid.Column="2"
                         x:Name="btnRefresh"
-                        Text="↻"
-                        BackgroundColor="#666680"
-                        TextColor="White"
+                        Text="���"
+                        BackgroundColor="#FFD700"
+                        TextColor="#0A0A0A"
                         FontSize="14"
                         CornerRadius="8"
                         WidthRequest="36"
@@ -162,10 +164,11 @@
                         ItemsLayout="VerticalList">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:FtpItem">
-                    <Border BackgroundColor="#1e1e2e"
+                    <Border BackgroundColor="#151515"
                             StrokeShape="RoundRectangle 8"
                             Padding="12"
-                            Stroke="Transparent"
+                            Stroke="#333"
+                            StrokeThickness="1"
                             Margin="0,2">
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
                             <Label Grid.Column="0"
@@ -175,17 +178,17 @@
                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
                                 <Label Text="{Binding Name}"
                                        FontSize="14"
-                                       TextColor="White"
+                                       TextColor="#FFD700"
                                        FontAttributes="Bold"
                                        LineBreakMode="TailTruncation" />
                                 <Label Text="{Binding Info}"
                                        FontSize="11"
-                                       TextColor="Gray" />
+                                       TextColor="#B8860B" />
                             </VerticalStackLayout>
                             <Label Grid.Column="2"
                                    Text="{Binding SizeText}"
                                    FontSize="12"
-                                   TextColor="LightGray"
+                                   TextColor="#8B6914"
                                    VerticalTextAlignment="Center" />
                         </Grid>
                     </Border>
@@ -195,14 +198,15 @@
 
         <!-- Status Bar -->
         <Border Grid.Row="5"
-                BackgroundColor="#232330"
+                BackgroundColor="#151515"
                 StrokeShape="RoundRectangle 8"
                 Padding="10"
-                Stroke="Transparent">
+                Stroke="#333"
+                StrokeThickness="1">
             <Label x:Name="lblStatus"
                    Text="غير متصل"
                    FontSize="12"
-                   TextColor="Gray"
+                   TextColor="#B8860B"
                    HorizontalTextAlignment="Center" />
         </Border>
 

@@ -3,65 +3,67 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PS5PayloadSender.PayloadPage"
              Title="إرسال الحمولة"
-             BackgroundColor="#1a1a2e">
+             BackgroundColor="#0A0A0A">
 
     <ScrollView>
         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="12">
 
             <!-- Developer Info -->
             <Border Grid.Row="0"
-                    BackgroundColor="#1e1e2e"
+                    BackgroundColor="#151515"
                     StrokeShape="RoundRectangle 12"
                     Padding="12"
-                    Stroke="#4285F4"
-                    StrokeThickness="1">
+                    Stroke="#FFD700"
+                    StrokeThickness="2">
                 <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
-                    <Label Text="🏪"
-                           FontSize="20"
+                    <Label Text="����"
+                           FontSize="24"
                            VerticalTextAlignment="Center" />
                     <VerticalStackLayout Spacing="1">
                         <Label Text="Ahlawy-Store"
-                               FontSize="16"
+                               FontSize="18"
                                FontAttributes="Bold"
-                               TextColor="#4285F4" />
-                        <Label Text="📞 01018251103"
+                               TextColor="#FFD700" />
+                        <Label Text="���� 01018251103"
                                FontSize="12"
-                               TextColor="LightGray" />
+                               TextColor="#B8860B" />
                     </VerticalStackLayout>
                 </HorizontalStackLayout>
             </Border>
 
             <!-- Title -->
             <Label Grid.Row="1"
-                   Text="► إرسال الحمولة (Payload)"
+                   Text="�� إرسال الحمولة (Payload)"
                    FontSize="22"
                    FontAttributes="Bold"
-                   TextColor="#4285F4" />
+                   TextColor="#FFD700" />
 
             <!-- IP & Port -->
             <Border Grid.Row="2"
-                    BackgroundColor="#232330"
+                    BackgroundColor="#151515"
                     StrokeShape="RoundRectangle 12"
                     Padding="16"
-                    Stroke="Transparent">
+                    Stroke="#FFD700"
+                    StrokeThickness="1">
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <VerticalStackLayout Grid.Column="0" Spacing="4">
-                        <Label Text="عنوان IP للجهاز" FontSize="13" TextColor="LightGray" />
+                        <Label Text="عنوان IP للجهاز" FontSize="13" TextColor="#FFD700" />
                         <Entry x:Name="txtIp"
                                Text="192.168.1.100"
                                FontSize="18"
-                               TextColor="White"
-                               BackgroundColor="#2d2d3c"
+                               TextColor="#FFD700"
+                               BackgroundColor="#0A0A0A"
                                HorizontalTextAlignment="Center"
-                               PlaceholderColor="Gray" />
+                               PlaceholderColor="#666"
+                               TextColor="#FFD700" />
                     </VerticalStackLayout>
                     <VerticalStackLayout Grid.Column="1" Spacing="4" WidthRequest="80">
-                        <Label Text="المنفذ" FontSize="13" TextColor="LightGray" HorizontalTextAlignment="Center" />
+                        <Label Text="المنفذ" FontSize="13" TextColor="#FFD700" HorizontalTextAlignment="Center" />
                         <Entry x:Name="txtPort"
                                Text="9021"
                                FontSize="18"
-                               TextColor="White"
-                               BackgroundColor="#2d2d3c"
+                               TextColor="#FFD700"
+                               BackgroundColor="#0A0A0A"
                                HorizontalTextAlignment="Center"
                                Keyboard="Numeric" />
                     </VerticalStackLayout>
@@ -70,28 +72,29 @@
 
             <!-- File Picker -->
             <Border Grid.Row="3"
-                    BackgroundColor="#232330"
+                    BackgroundColor="#151515"
                     StrokeShape="RoundRectangle 12"
                     Padding="16"
-                    Stroke="Transparent">
+                    Stroke="#FFD700"
+                    StrokeThickness="1">
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                     <VerticalStackLayout Grid.Column="0" Spacing="4">
-                        <Label Text="ملف الحمولة المخصصة (Payload File)" FontSize="13" TextColor="LightGray" />
+                        <Label Text="ملف الحمولة المخصصة (Payload File)" FontSize="13" TextColor="#FFD700" />
                         <Label x:Name="lblFileName"
                                Text="لم يتم اختيار ملف"
                                FontSize="14"
-                               TextColor="Gray"
+                               TextColor="#B8860B"
                                LineBreakMode="TailTruncation" />
                         <Label x:Name="lblFileSize"
                                Text=""
                                FontSize="11"
-                               TextColor="DarkGray" />
+                               TextColor="#8B6914" />
                     </VerticalStackLayout>
                     <Button Grid.Column="1"
                             x:Name="btnBrowse"
                             Text="استعراض"
-                            BackgroundColor="#4285F4"
-                            TextColor="White"
+                            BackgroundColor="#FFD700"
+                            TextColor="#0A0A0A"
                             FontAttributes="Bold"
                             CornerRadius="8"
                             WidthRequest="90"
@@ -103,9 +106,9 @@
             <!-- Send Button -->
             <Button Grid.Row="4"
                     x:Name="btnSend"
-                    Text="► إرسال الحمولة (منفذ 9021)"
-                    BackgroundColor="#4285F4"
-                    TextColor="White"
+                    Text="�� إرسال الحمولة (منفذ 9021)"
+                    BackgroundColor="#FFD700"
+                    TextColor="#0A0A0A"
                     FontSize="16"
                     FontAttributes="Bold"
                     CornerRadius="12"
@@ -114,16 +117,17 @@
 
             <!-- Log -->
             <Border Grid.Row="5"
-                    BackgroundColor="#12121c"
+                    BackgroundColor="#0D0D0D"
                     StrokeShape="RoundRectangle 12"
                     Padding="12"
-                    Stroke="Transparent"
+                    Stroke="#333"
+                    StrokeThickness="1"
                     HeightRequest="280">
                 <Grid RowDefinitions="Auto,*">
                     <Label Grid.Row="0"
                            Text="سجل الإرسال (Console Output)"
                            FontSize="13"
-                           TextColor="LightGray"
+                           TextColor="#FFD700"
                            Margin="0,0,0,8" />
                     <CollectionView Grid.Row="1"
                                     x:Name="cvLog"
@@ -134,7 +138,7 @@
                                 <Label Text="{Binding .}"
                                        FontFamily="Courier New"
                                        FontSize="12"
-                                       TextColor="#90EE90"
+                                       TextColor="#FFD700"
                                        Margin="0,1" />
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

@@ -64,9 +64,6 @@ public partial class FtpPage : ContentPage
             lblStatus.TextColor = Colors.LimeGreen;
             btnConnect.Text = "قطع";
             btnConnect.BackgroundColor = Colors.Red;
-            btnUpload.IsEnabled = true;
-            btnUploadFolder.IsEnabled = true;
-            btnDownload.IsEnabled = true;
             btnUp.IsEnabled = true;
             btnRefresh.IsEnabled = true;
 
@@ -100,9 +97,6 @@ public partial class FtpPage : ContentPage
         lblStatus.TextColor = Colors.Gray;
         btnConnect.Text = "اتصال";
         btnConnect.BackgroundColor = Color.FromArgb("#34A853");
-        btnUpload.IsEnabled = false;
-        btnUploadFolder.IsEnabled = false;
-        btnDownload.IsEnabled = false;
         btnUp.IsEnabled = false;
         btnRefresh.IsEnabled = false;
         _items.Clear();

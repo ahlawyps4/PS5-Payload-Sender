@@ -6,11 +6,11 @@
     xmlns:local="clr-namespace:PS5PayloadSender"
     Title="Ahlawy-Store"
     Shell.FlyoutBehavior="Disabled"
-    Shell.TabBarBackgroundColor="#1a1a2e"
-    Shell.TabBarUnselectedColor="#888888"
-    Shell.TabBarForegroundColor="#4285F4"
-    Shell.BackgroundColor="#1a1a2e"
-    Shell.ForegroundColor="White">
+    Shell.TabBarBackgroundColor="#0A0A0A"
+    Shell.TabBarUnselectedColor="#8B6914"
+    Shell.TabBarForegroundColor="#FFD700"
+    Shell.BackgroundColor="#0A0A0A"
+    Shell.ForegroundColor="#FFD700">
 
     <TabBar>
         <ShellContent
