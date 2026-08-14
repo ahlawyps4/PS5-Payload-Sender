@@ -11,7 +11,7 @@ public class FolderPickerActivity : Activity
     protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-        Handler.MainHandler.Post(() =>
+        RunOnUiThread(() =>
         {
             var intent = new Intent(Intent.ActionOpenDocumentTree);
             intent.AddFlags(ActivityFlags.GrantReadUriPermission | ActivityFlags.GrantPersistableUriPermission);
