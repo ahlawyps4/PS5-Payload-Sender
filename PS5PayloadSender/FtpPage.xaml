@@ -22,7 +22,7 @@
                 Stroke="Transparent">
             <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
                 <VerticalStackLayout Grid.Column="0" Spacing="2">
-                    <Label Text="IP & المنفذ" FontSize="11" TextColor="LightGray" />
+                    <Label Text="IP &amp; المنفذ" FontSize="11" TextColor="LightGray" />
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="4">
                         <Entry x:Name="txtFtpIp"
                                Text="192.168.1.100"
