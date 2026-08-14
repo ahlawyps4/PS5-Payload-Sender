@@ -11,8 +11,8 @@
 		<Nullable>enable</Nullable>
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
-		<ApplicationTitle>PS5 Payload Sender</ApplicationTitle>
-		<ApplicationId>com.ps5tools.payloadsender</ApplicationId>
+		<ApplicationTitle>Ahlawy-Store</ApplicationTitle>
+		<ApplicationId>com.ahlawyps4.ps5payloadsender</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 

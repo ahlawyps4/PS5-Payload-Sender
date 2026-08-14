@@ -6,17 +6,40 @@
              BackgroundColor="#1a1a2e">
 
     <ScrollView>
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="12">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Padding="16" RowSpacing="12">
+
+            <!-- Developer Info -->
+            <Border Grid.Row="0"
+                    BackgroundColor="#1e1e2e"
+                    StrokeShape="RoundRectangle 12"
+                    Padding="12"
+                    Stroke="#4285F4"
+                    StrokeThickness="1">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="🏪"
+                           FontSize="20"
+                           VerticalTextAlignment="Center" />
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="Ahlawy-Store"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#4285F4" />
+                        <Label Text="📞 01018251103"
+                               FontSize="12"
+                               TextColor="LightGray" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
 
             <!-- Title -->
-            <Label Grid.Row="0"
+            <Label Grid.Row="1"
                    Text="► إرسال الحمولة (Payload)"
                    FontSize="22"
                    FontAttributes="Bold"
                    TextColor="#4285F4" />
 
             <!-- IP & Port -->
-            <Border Grid.Row="1"
+            <Border Grid.Row="2"
                     BackgroundColor="#232330"
                     StrokeShape="RoundRectangle 12"
                     Padding="16"
@@ -46,7 +69,7 @@
             </Border>
 
             <!-- File Picker -->
-            <Border Grid.Row="2"
+            <Border Grid.Row="3"
                     BackgroundColor="#232330"
                     StrokeShape="RoundRectangle 12"
                     Padding="16"
@@ -78,7 +101,7 @@
             </Border>
 
             <!-- Send Button -->
-            <Button Grid.Row="3"
+            <Button Grid.Row="4"
                     x:Name="btnSend"
                     Text="► إرسال الحمولة (منفذ 9021)"
                     BackgroundColor="#4285F4"
@@ -90,7 +113,7 @@
                     Clicked="OnSendClicked" />
 
             <!-- Log -->
-            <Border Grid.Row="4"
+            <Border Grid.Row="5"
                     BackgroundColor="#12121c"
                     StrokeShape="RoundRectangle 12"
                     Padding="12"

@@ -1,3 +1,8 @@
+#if ANDROID
+using Android.Content;
+using Android.Provider;
+#endif
+
 using System.Collections.ObjectModel;
 using System.Net.Sockets;
 using System.Text;
@@ -327,6 +332,7 @@ public partial class FtpPage : ContentPage
     {
         if (!_connected) return;
 
+#if ANDROID
         var tcs = new TaskCompletionSource<string?>();
         FolderPickerCallback.Instance.SetResult(tcs);
 
@@ -389,8 +395,12 @@ public partial class FtpPage : ContentPage
         lblStatus.Text = $"● متصل  •  {_items.Count} عنصر";
         lblStatus.TextColor = Colors.LimeGreen;
         await LoadDirectory();
+#else
+        await DisplayAlert("تنبيه", "اختيار الفلدر متاح على الأندرويد فقط", "OK");
+#endif
     }
 
+#if ANDROID
     private string? GetFolderName(Android.Content.Context context, Android.Net.Uri treeUri)
     {
         try
@@ -448,6 +458,7 @@ public partial class FtpPage : ContentPage
         catch { }
         return result;
     }
+#endif
 
     private async void OnDownloadClicked(object? sender, EventArgs e)
     {

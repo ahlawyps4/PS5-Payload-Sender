@@ -22,11 +22,11 @@ public class FolderPickerActivity : Activity
 
         if (requestCode == 1001 && resultCode == Result.Ok && data?.Data != null)
         {
-            FolderPickerCallback.Instance.SetResult(data.Data.ToString());
+            FolderPickerCallback.Instance.SetUriResult(data.Data.ToString());
         }
         else
         {
-            FolderPickerCallback.Instance.SetResult(null);
+            FolderPickerCallback.Instance.SetUriResult(null);
         }
         Finish();
     }
@@ -42,7 +42,7 @@ public class FolderPickerCallback
         _tcs = tcs;
     }
 
-    public void SetResult(string? result)
+    public void SetUriResult(string? result)
     {
         _tcs?.TrySetResult(result);
     }

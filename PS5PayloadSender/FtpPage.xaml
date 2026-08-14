@@ -6,17 +6,40 @@
              Title="متصفح FTP"
              BackgroundColor="#1a1a2e">
 
-    <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="16" RowSpacing="8">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" Padding="16" RowSpacing="8">
+
+        <!-- Developer Info -->
+        <Border Grid.Row="0"
+                BackgroundColor="#1e1e2e"
+                StrokeShape="RoundRectangle 12"
+                Padding="10"
+                Stroke="#4285F4"
+                StrokeThickness="1">
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Label Text="🏪"
+                       FontSize="18"
+                       VerticalTextAlignment="Center" />
+                <VerticalStackLayout Spacing="1">
+                    <Label Text="Ahlawy-Store"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="#4285F4" />
+                    <Label Text="📞 01018251103"
+                           FontSize="11"
+                           TextColor="LightGray" />
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+        </Border>
 
         <!-- Title -->
-        <Label Grid.Row="0"
+        <Label Grid.Row="1"
                Text="FTP متصفح الملفات"
                FontSize="22"
                FontAttributes="Bold"
                TextColor="#4285F4" />
 
         <!-- Connection -->
-        <Border Grid.Row="1"
+        <Border Grid.Row="2"
                 BackgroundColor="#232330"
                 StrokeShape="RoundRectangle 12"
                 Padding="12"
@@ -93,7 +116,7 @@
         </Border>
 
         <!-- Path -->
-        <Border Grid.Row="2"
+        <Border Grid.Row="3"
                 BackgroundColor="#232330"
                 StrokeShape="RoundRectangle 12"
                 Padding="8"
@@ -132,7 +155,7 @@
         </Border>
 
         <!-- File List -->
-        <CollectionView Grid.Row="3"
+        <CollectionView Grid.Row="4"
                         x:Name="cvFiles"
                         SelectionMode="Single"
                         SelectionChanged="OnFileSelected"
@@ -171,7 +194,7 @@
         </CollectionView>
 
         <!-- Status Bar -->
-        <Border Grid.Row="4"
+        <Border Grid.Row="5"
                 BackgroundColor="#232330"
                 StrokeShape="RoundRectangle 8"
                 Padding="10"

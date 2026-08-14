@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build & Sign Android APK
 
 on:
   push:
@@ -20,18 +20,45 @@ jobs:
       with:
         dotnet-version: '10.0.x'
 
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
     - name: Install MAUI workload
       run: dotnet workload install maui-android
+
+    - name: Generate signing keystore
+      run: |
+        keytool -genkeypair -v -keystore ahlawy-store.keystore -alias ahlawy -keyalg RSA -keysize 2048 -validity 10000 -storepass ahlawy123 -keypass ahlawy123 -dname "CN=Ahlawy-Store, OU=Dev, O=Ahlawy-Store, L=Cairo, ST=Cairo, C=EG"
 
     - name: Restore dependencies
       run: dotnet restore PS5PayloadSender/PS5PayloadSender.csproj
 
-    - name: Build APK (Release)
+    - name: Build APK (Release - Unsigned)
       run: dotnet build PS5PayloadSender/PS5PayloadSender.csproj -f net10.0-android -c Release -o ./output
+
+    - name: Sign APK
+      run: |
+        jarsigner -keystore ahlawy-store.keystore -storepass ahlawy123 -keypass ahlawy123 -signedjar ./output/Ahlawy-Store-Signed.apk ./output/com.ahlawyps4.ps5payloadsender-Signed.apk ahlawy
+
+    - name: Zipalign APK
+      run: |
+        $zipalign = Join-Path $env:ANDROID_HOME "build-tools\*\zipalign.exe"
+        $zipalignPath = Get-ChildItem $zipalign | Select-Object -First 1
+        if ($zipalignPath) {
+            & $zipalignPath.FullName -f 4 ./output/Ahlawy-Store-Signed.apk ./output/Ahlawy-Store-Final.apk
+        } else {
+            Copy-Item ./output/Ahlawy-Store-Signed.apk ./output/Ahlawy-Store-Final.apk
+        }
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: PS5PayloadSender-APK
-        path: ./output/**/*.apk
+        name: Ahlawy-Store-APK
+        path: |
+          ./output/Ahlawy-Store-Final.apk
+          ./output/Ahlawy-Store-Signed.apk
+          ./output/com.ahlawyps4.ps5payloadsender-Signed.apk
         if-no-files-found: warn
