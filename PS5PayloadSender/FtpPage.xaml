@@ -137,7 +137,7 @@
                                    Text="{Binding Icon}"
                                    FontSize="22"
                                    VerticalTextAlignment="Center" />
-                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalTextAlignment="Center">
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
                                 <Label Text="{Binding Name}"
                                        FontSize="14"
                                        TextColor="White"

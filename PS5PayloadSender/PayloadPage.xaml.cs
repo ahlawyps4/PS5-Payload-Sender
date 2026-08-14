@@ -73,7 +73,7 @@ public partial class PayloadPage : ContentPage
         {
             try
             {
-                this.Dispatch(() =>
+                Dispatcher.Dispatch(() =>
                 {
                     Log($"[{DateTime.Now:HH:mm:ss}] جاهز لإرسال الحمولة عبر المنفذ {port}...", "White");
                     var fi = new FileInfo(filePath);
@@ -83,11 +83,11 @@ public partial class PayloadPage : ContentPage
 
                 using var client = new TcpClient();
 
-                this.Dispatch(() => Log($"[{DateTime.Now:HH:mm:ss}] جاري الاتصال بـ {ip}:{port}...", "Yellow"));
+                Dispatcher.Dispatch(() => Log($"[{DateTime.Now:HH:mm:ss}] جاري الاتصال بـ {ip}:{port}...", "Yellow"));
 
                 await client.ConnectAsync(ip, port);
 
-                this.Dispatch(() =>
+                Dispatcher.Dispatch(() =>
                 {
                     Log($"[{DateTime.Now:HH:mm:ss}] ✓ تم الاتصال بنجاح!", "#90EE90");
                     Log($"[{DateTime.Now:HH:mm:ss}] جاري إرسال الحمولة...", "Yellow");
@@ -110,13 +110,13 @@ public partial class PayloadPage : ContentPage
                     if (progress != lastProgress && progress % 10 == 0)
                     {
                         lastProgress = progress;
-                        this.Dispatch(() => Log($"[{DateTime.Now:HH:mm:ss}] جاري الإرسال... {progress}% ({totalSent:N0}/{fileStream.Length:N0})", "LightGray"));
+                        Dispatcher.Dispatch(() => Log($"[{DateTime.Now:HH:mm:ss}] جاري الإرسال... {progress}% ({totalSent:N0}/{fileStream.Length:N0})", "LightGray"));
                     }
                 }
 
                 await stream.FlushAsync();
 
-                this.Dispatch(() =>
+                Dispatcher.Dispatch(() =>
                 {
                     Log($"[{DateTime.Now:HH:mm:ss}] 🚀 تم إرسال الحمولة بنجاح!", "#00FF7F");
                     Log($"    [{fileName}] → {ip}:{port}", "#90EE90");
@@ -124,14 +124,14 @@ public partial class PayloadPage : ContentPage
             }
             catch (Exception ex)
             {
-                this.Dispatch(() =>
+                Dispatcher.Dispatch(() =>
                 {
                     Log($"[{DateTime.Now:HH:mm:ss}] ✗ فشل الإرسال: {ex.Message}", "#FF6B6B");
                 });
             }
             finally
             {
-                this.Dispatch(() =>
+                Dispatcher.Dispatch(() =>
                 {
                     btnSend.IsEnabled = true;
                     btnSend.Text = "► إرسال الحمولة (منفذ 9021)";
