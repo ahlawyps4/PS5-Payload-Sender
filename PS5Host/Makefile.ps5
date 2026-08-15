@@ -42,18 +42,19 @@ LDADD  += `$(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config libmicrohttpd --libs`
 LDADD  += `$(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config microdns --libs`
 LDADD  += `$(PS5_PAYLOAD_SDK)/bin/prospero-pkg-config libsmb2 --libs`
 
-ASSETS   := $(wildcard assets/*)
+ASSETS   := $(shell find assets -type f)
 GEN_SRCS := $(patsubst assets/%,gen/%, $(ASSETS:=.c))
 
 all: $(BIN)
 
 gen:
-	mkdir gen
+	mkdir -p gen
 
 clean:
 	rm -rf $(BIN) gen
 
 gen/%.c: assets/% gen
+	@mkdir -p $(dir $@)
 	$(PYTHON) gen-asset-module.py --path $* $< > $@
 
 $(BIN): $(SRCS) $(GEN_SRCS)
