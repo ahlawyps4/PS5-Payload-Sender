@@ -45,7 +45,7 @@
                     Padding="16"
                     Stroke="#FFD700"
                     StrokeThickness="1">
-                <Grid RowDefinitions="Auto,Auto" RowSpacing="12">
+                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
                     <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="12">
                         <VerticalStackLayout Grid.Column="0" Spacing="4">
                             <Label Text="عنوان IP للجهاز" FontSize="13" TextColor="#FFD700" />
@@ -96,6 +96,24 @@
                                            IsRunning="False"
                                            IsVisible="False"
                                            Color="#FFD700" />
+                    </Grid>
+
+                    <Grid Grid.Row="2" ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label Grid.Column="0"
+                               Text="منفذ FTP (فحص)"
+                               FontSize="13"
+                               TextColor="#FFD700"
+                               VerticalTextAlignment="Center" />
+                        <Entry Grid.Column="1"
+                               x:Name="txtFtpPort"
+                               Text="2121"
+                               FontSize="16"
+                               TextColor="#FFD700"
+                               BackgroundColor="#0A0A0A"
+                               HorizontalTextAlignment="Center"
+                               HorizontalOptions="Start"
+                               Keyboard="Numeric"
+                               WidthRequest="90" />
                     </Grid>
                 </Grid>
             </Border>

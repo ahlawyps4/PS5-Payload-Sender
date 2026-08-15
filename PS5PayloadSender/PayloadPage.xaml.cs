@@ -6,6 +6,7 @@ namespace PS5PayloadSender;
 public partial class PayloadPage : ContentPage
 {
     private readonly ObservableCollection<string> _logLines = new();
+    private readonly List<PickerEntry> _pickerEntries = new();
     private string? _selectedFilePath;
     private int _selectedBundledIndex = -1;
     private TcpClient? _payloadClient;
@@ -13,7 +14,7 @@ public partial class PayloadPage : ContentPage
     private bool _payloadConnected;
     private bool _ftpConnected;
 
-    private static readonly (string Asset, string Display)[] BundledPayloads =
+    private static readonly (string Asset, string Display)[] BundledPayloadsPS5 =
     {
         ("payloads/etaHEN_v2.5B.bin", "etaHEN v2.5B"),
         ("payloads/ftpsrv_ps5-payload_v0.21.elf", "FTP Server v0.21"),
@@ -23,18 +24,50 @@ public partial class PayloadPage : ContentPage
         ("payloads/Webkit-autoloader-v0.3.elf", "Webkit autoloader v0.3"),
     };
 
+    private static readonly (string Asset, string Display)[] BundledPayloadsPS4 =
+    {
+        // ("payloads4/goldhen.bin", "goldHEN"),
+        // أضف حمولات PS4 هنا عند توفرها (مثال: ("payloads4/hen.bin", "HEN"))
+    };
+
+    private const string HeaderPS5 = "── حمولات PS5 ──";
+    private const string HeaderPS4 = "── حمولات PS4 ──";
+
+    private record PickerEntry(bool IsHeader, string Text, string? Asset);
+
     public PayloadPage()
     {
         InitializeComponent();
         cvLog.ItemsSource = _logLines;
 
-        foreach (var p in BundledPayloads)
-            pickerBundled.Items.Add(p.Display);
+        BuildBundledPicker();
 
         txtIp.Text = Preferences.Get("payload_ip", "192.168.1.100");
         txtPort.Text = Preferences.Get("payload_port", "9021");
+        txtFtpPort.Text = Preferences.Get("ftp_port", "2121");
         txtIp.TextChanged += (s, e) => Preferences.Set("payload_ip", txtIp.Text ?? "");
         txtPort.TextChanged += (s, e) => Preferences.Set("payload_port", txtPort.Text ?? "");
+        txtFtpPort.TextChanged += (s, e) => Preferences.Set("ftp_port", txtFtpPort.Text ?? "");
+    }
+
+    private void BuildBundledPicker()
+    {
+        _pickerEntries.Clear();
+        pickerBundled.Items.Clear();
+
+        _pickerEntries.Add(new PickerEntry(true, HeaderPS5, null));
+        foreach (var p in BundledPayloadsPS5)
+            _pickerEntries.Add(new PickerEntry(false, p.Display, p.Asset));
+
+        _pickerEntries.Add(new PickerEntry(true, HeaderPS4, null));
+        foreach (var p in BundledPayloadsPS4)
+            _pickerEntries.Add(new PickerEntry(false, p.Display, p.Asset));
+
+        if (BundledPayloadsPS4.Length == 0)
+            _pickerEntries.Add(new PickerEntry(true, "لا توجد حمولات PS4 مضافة بعد", null));
+
+        foreach (var entry in _pickerEntries)
+            pickerBundled.Items.Add(entry.Text);
     }
 
     protected override void OnAppearing()
@@ -53,6 +86,7 @@ public partial class PayloadPage : ContentPage
 
         string ip = txtIp.Text?.Trim() ?? "192.168.1.100";
         int port = int.TryParse(txtPort.Text, out int p) ? p : 9021;
+        int ftpPort = int.TryParse(txtFtpPort.Text, out int fp) ? fp : 2121;
 
         btnConnect.IsEnabled = false;
         btnConnect.Text = "جاري...";
@@ -61,7 +95,7 @@ public partial class PayloadPage : ContentPage
         lblConnState.Text = "جاري الاتصال...";
         lblConnState.TextColor = Colors.Yellow;
         SetPortLabel(lblS9021, port, false);
-        SetPortLabel(lblS2121, 2121, false);
+        SetPortLabel(lblS2121, ftpPort, false);
 
         try
         {
@@ -83,11 +117,11 @@ public partial class PayloadPage : ContentPage
             SetPortLabel(lblS9021, port, true);
             Log($"[✓] تم الاتصال بمنفذ الحمولة {port}", "#90EE90");
 
-            // Test 2121 - FTP reachability (read welcome banner, expect 220)
+            // Test FTP - reachability (read welcome banner, expect 220)
             try
             {
                 using var ftpTcp = new TcpClient();
-                var ftpTask = ftpTcp.ConnectAsync(ip, 2121);
+                var ftpTask = ftpTcp.ConnectAsync(ip, ftpPort);
                 var ftpTimeout = Task.Delay(5000);
                 var ftpDone = await Task.WhenAny(ftpTask, ftpTimeout);
                 if (ftpDone == ftpTimeout)
@@ -102,14 +136,14 @@ public partial class PayloadPage : ContentPage
                 int n = await ftpStream.ReadAsync(bannerBuf, 0, bannerBuf.Length);
                 string banner = System.Text.Encoding.ASCII.GetString(bannerBuf, 0, n);
                 _ftpConnected = banner.StartsWith("220");
-                SetPortLabel(lblS2121, 2121, _ftpConnected);
-                Log(_ftpConnected ? "[✓] منفذ FTP 2121 متصل (خدمة FTP تعمل)" : "[!] منفذ FTP 2121 استجاب بدون ترحيب 220", _ftpConnected ? "#90EE90" : "#FFD700");
+                SetPortLabel(lblS2121, ftpPort, _ftpConnected);
+                Log(_ftpConnected ? $"[✓] منفذ FTP {ftpPort} متصل (خدمة FTP تعمل)" : $"[!] منفذ FTP {ftpPort} استجاب بدون ترحيب 220", _ftpConnected ? "#90EE90" : "#FFD700");
             }
             catch (Exception ftpEx)
             {
                 _ftpConnected = false;
-                SetPortLabel(lblS2121, 2121, false);
-                Log($"[!] منفذ FTP 2121 غير متاح: {ftpEx.Message}", "#FF6B6B");
+                SetPortLabel(lblS2121, ftpPort, false);
+                Log($"[!] منفذ FTP {ftpPort} غير متاح: {ftpEx.Message}", "#FF6B6B");
             }
 
             if (_payloadConnected && _ftpConnected)
@@ -133,7 +167,7 @@ public partial class PayloadPage : ContentPage
             lblConnState.Text = "غير متصل";
             lblConnState.TextColor = Colors.Red;
             SetPortLabel(lblS9021, port, false);
-            SetPortLabel(lblS2121, 2121, false);
+            SetPortLabel(lblS2121, ftpPort, false);
             Log($"[✗] فشل الاتصال: {ex.Message}", "#FF6B6B");
             await DisplayAlert("فشل الاتصال", ex.Message, "موافق");
         }
@@ -161,7 +195,7 @@ public partial class PayloadPage : ContentPage
         btnConnect.Text = "اتصال";
         btnConnect.BackgroundColor = Color.FromArgb("#34A853");
         SetPortLabel(lblS9021, int.TryParse(txtPort.Text, out int p) ? p : 9021, false);
-        SetPortLabel(lblS2121, 2121, false);
+        SetPortLabel(lblS2121, int.TryParse(txtFtpPort.Text, out int fp) ? fp : 2121, false);
     }
 
     private void SetPortLabel(Label label, int port, bool ok)
@@ -178,18 +212,25 @@ public partial class PayloadPage : ContentPage
 
     private async void OnBundledSelected(object? sender, EventArgs e)
     {
-        if (pickerBundled.SelectedIndex < 0 || pickerBundled.SelectedIndex >= BundledPayloads.Length) return;
+        int idx = pickerBundled.SelectedIndex;
+        if (idx < 0 || idx >= _pickerEntries.Count) return;
 
-        _selectedBundledIndex = pickerBundled.SelectedIndex;
+        var entry = _pickerEntries[idx];
+        if (entry.IsHeader)
+        {
+            pickerBundled.SelectedIndex = -1;
+            return;
+        }
+
+        _selectedBundledIndex = idx;
         _selectedFilePath = null;
-        var item = BundledPayloads[pickerBundled.SelectedIndex];
 
-        lblFileName.Text = item.Display;
+        lblFileName.Text = entry.Text;
         lblFileName.TextColor = Colors.White;
         lblFileSize.Text = "الحمولة مدمجة داخل التطبيق";
         lblFileSize.TextColor = Colors.LightGray;
 
-        Log($"[✓] تم اختيار حمولة مدمجة: {item.Display}", "#90EE90");
+        Log($"[✓] تم اختيار حمولة مدمجة: {entry.Text}", "#90EE90");
     }
 
     private async void OnBrowseClicked(object? sender, EventArgs e)
@@ -236,12 +277,13 @@ public partial class PayloadPage : ContentPage
         string sourceLabel = "";
 
         Stream sourceStream;
-        if (_selectedBundledIndex >= 0 && _selectedBundledIndex < BundledPayloads.Length)
+        if (_selectedBundledIndex >= 0 && _selectedBundledIndex < _pickerEntries.Count
+            && !_pickerEntries[_selectedBundledIndex].IsHeader)
         {
-            var item = BundledPayloads[_selectedBundledIndex];
-            fileName = item.Display;
-            sourceLabel = item.Asset;
-            sourceStream = await FileSystem.OpenAppPackageFileAsync(item.Asset);
+            var item = _pickerEntries[_selectedBundledIndex];
+            fileName = item.Text;
+            sourceLabel = item.Asset ?? "";
+            sourceStream = await FileSystem.OpenAppPackageFileAsync(item.Asset!);
         }
         else if (!string.IsNullOrEmpty(_selectedFilePath) && File.Exists(_selectedFilePath))
         {
