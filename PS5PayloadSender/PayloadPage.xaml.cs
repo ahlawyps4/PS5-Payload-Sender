@@ -17,6 +17,7 @@ public partial class PayloadPage : ContentPage
     private static readonly (string Asset, string Display)[] BundledPayloadsPS5 =
     {
         ("payloads/etaHEN_v2.5B.bin", "etaHEN v2.5B"),
+        ("payloads/ahlawy-host.elf", "Ahlawy-Store Host v1.0"),
         ("payloads/ftpsrv_ps5-payload_v0.21.elf", "FTP Server v0.21"),
         ("payloads/Host-PSM-Offline-v1.0.0.elf", "Host PSM Offline v1.0.0"),
         ("payloads/kstuff-lite_v1.10.elf", "kstuff-lite v1.10"),
