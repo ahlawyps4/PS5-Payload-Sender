@@ -18,6 +18,7 @@ public partial class PayloadPage : ContentPage
     {
         ("payloads/etaHEN_v2.5B.bin", "etaHEN v2.5B"),
         ("payloads/ftpsrv_ps5-payload_v0.21.elf", "FTP Server v0.21"),
+        ("payloads/Host-PSM-Offline-v1.0.0.elf", "Host PSM Offline v1.0.0"),
         ("payloads/kstuff-lite_v1.10.elf", "kstuff-lite v1.10"),
         ("payloads/nanoDNS_v0.4.elf", "nanoDNS v0.4"),
         ("payloads/Shadow-mount-plus_v1.7.elf", "Shadow mount plus v1.7"),
