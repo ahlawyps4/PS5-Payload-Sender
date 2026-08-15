@@ -1,0 +1,6 @@
+gen
+*.o
+websrv-ps5.elf
+websrv.pc
+*~
+hlawy-host.elf
