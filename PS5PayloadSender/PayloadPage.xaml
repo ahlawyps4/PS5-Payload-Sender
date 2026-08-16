@@ -130,7 +130,7 @@
                            FontSize="13"
                            TextColor="#FFD700" />
                     <Picker x:Name="pickerBundled"
-                            Title="اختر حمولة من القائمة..."
+                            Title="اختر حمولة..."
                             BackgroundColor="#0A0A0A"
                             TextColor="#FFD700"
                             TitleColor="#B8860B"

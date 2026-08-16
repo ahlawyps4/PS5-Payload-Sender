@@ -69,6 +69,7 @@ public partial class PayloadPage : ContentPage
         _pickerEntries.Clear();
         pickerBundled.Items.Clear();
 
+        _pickerEntries.Add(new PickerEntry(true, "\u274C \u0625\u063A\u0644\u0627\u0621 \u0627\u0644\u062A\u062D\u062F\u064A\u062F (Deselect)", null));
         _pickerEntries.Add(new PickerEntry(true, HeaderPS5, null));
         foreach (var p in BundledPayloadsPS5)
             _pickerEntries.Add(new PickerEntry(false, p.Display, p.Asset));
@@ -232,6 +233,17 @@ public partial class PayloadPage : ContentPage
         var entry = _pickerEntries[idx];
         if (entry.IsHeader)
         {
+            if (idx == 0)
+            {
+                _selectedBundledIndex = -1;
+                _selectedFilePath = null;
+                pickerBundled.SelectedIndex = -1;
+                lblFileName.Text = "\u0644\u0645 \u064A\u062A\u0645 \u0627\u062E\u062A\u064A\u0627\u0631 \u0645\u0644\u0641";
+                lblFileName.TextColor = Color.FromArgb("#B8860B");
+                lblFileSize.Text = "";
+                Log("[\u274C] \u0625\u0644\u063A\u0627\u0621 \u062A\u062D\u062F\u064A\u062F \u0627\u0644\u062D\u0645\u0648\u0644\u0629", "#FFD700");
+                return;
+            }
             pickerBundled.SelectedIndex = -1;
             return;
         }
