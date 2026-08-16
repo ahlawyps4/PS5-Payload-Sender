@@ -174,7 +174,7 @@
             <!-- Send Button -->
             <Button Grid.Row="5"
                     x:Name="btnSend"
-                    Text="&#9654; إرسال الحمولة (منفذ 9021)"
+                    Text="&#9654; إرسال الحمولة"
                     BackgroundColor="#FFD700"
                     TextColor="#0A0A0A"
                     FontSize="16"

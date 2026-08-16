@@ -48,8 +48,20 @@ public partial class PayloadPage : ContentPage
         txtPort.Text = Preferences.Get("payload_port", "9021");
         txtFtpPort.Text = Preferences.Get("ftp_port", "2121");
         txtIp.TextChanged += (s, e) => Preferences.Set("payload_ip", txtIp.Text ?? "");
-        txtPort.TextChanged += (s, e) => Preferences.Set("payload_port", txtPort.Text ?? "");
+        txtPort.TextChanged += (s, e) =>
+        {
+            Preferences.Set("payload_port", txtPort.Text ?? "");
+            UpdateSendButtonText();
+        };
         txtFtpPort.TextChanged += (s, e) => Preferences.Set("ftp_port", txtFtpPort.Text ?? "");
+
+        UpdateSendButtonText();
+    }
+
+    private void UpdateSendButtonText()
+    {
+        string port = string.IsNullOrWhiteSpace(txtPort.Text) ? "9021" : txtPort.Text;
+        btnSend.Text = $"\u25B6 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u062D\u0645\u0648\u0644\u0629 (\u0645\u0646\u0641\u0630 {port})";
     }
 
     private void BuildBundledPicker()
@@ -439,7 +451,7 @@ public partial class PayloadPage : ContentPage
                 Dispatcher.Dispatch(() =>
                 {
                     btnSend.IsEnabled = true;
-                    btnSend.Text = "► إرسال الحمولة (منفذ 9021)";
+                    UpdateSendButtonText();
                 });
             }
         });
