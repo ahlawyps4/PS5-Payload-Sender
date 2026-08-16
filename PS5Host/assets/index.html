@@ -5,129 +5,230 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ahlawy-Store - PS5 Exploit Host</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #0b0e14;
-      --card-bg: #0f1923;
-      --card-border: #1a3045;
-      --text-primary: #e0e6ed;
+      --bg-deep: #020510;
+      --bg-mid: #0a0e1a;
+      --card-bg: rgba(10, 18, 35, 0.92);
+      --card-border: rgba(28, 144, 224, 0.25);
+      --text-primary: #e8edf5;
       --text-secondary: #7a8fa0;
-      --text-muted: #4a5b6d;
+      --text-muted: #3a4a5d;
       --accent: #1c90e0;
-      --accent-glow: rgba(28, 144, 224, 0.15);
-      --green: #2ecc71;
-      --green-glow: rgba(46, 204, 113, 0.3);
-      --gold: #d4a843;
-      --step-inactive: #1a2a3a;
+      --accent-light: #4db8ff;
+      --accent-glow: rgba(28, 144, 224, 0.4);
+      --green: #00e676;
+      --green-glow: rgba(0, 230, 118, 0.35);
+      --gold: #ffd740;
+      --gold-glow: rgba(255, 215, 64, 0.3);
+      --step-inactive: #0d1a2d;
       --step-active: #1c90e0;
-      --step-done: #2ecc71;
+      --step-done: #00e676;
     }
 
     body {
-      background: var(--bg);
+      background: var(--bg-deep);
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(28, 144, 224, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 20% 100%, rgba(0, 230, 118, 0.04), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(255, 215, 64, 0.03), transparent);
       color: var(--text-primary);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      perspective: 1200px;
     }
 
+    /* ── 3D floating particles ── */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 300px; height: 300px;
+      top: -80px; right: -60px;
+      background: radial-gradient(circle, rgba(28,144,224,0.06), transparent 70%);
+      animation: floatParticle 12s ease-in-out infinite;
+    }
+    body::after {
+      width: 250px; height: 250px;
+      bottom: -60px; left: -40px;
+      background: radial-gradient(circle, rgba(0,230,118,0.05), transparent 70%);
+      animation: floatParticle 15s ease-in-out infinite reverse;
+    }
+    @keyframes floatParticle {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(180deg); }
+    }
+
+    /* ── Main 3D Card ── */
     .host-card {
-      width: 90%;
-      max-width: 780px;
+      width: 92%;
+      max-width: 760px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 32px 40px;
+      border-radius: 20px;
+      padding: 36px 42px 32px;
       position: relative;
+      z-index: 1;
+      transform: rotateX(2deg) rotateY(-1deg);
+      transform-style: preserve-3d;
+      box-shadow:
+        0 2px 0 rgba(28,144,224,0.1),
+        0 8px 0 rgba(0,0,0,0.3),
+        0 20px 40px rgba(0,0,0,0.5),
+        0 40px 80px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
+      backdrop-filter: blur(20px);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .host-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--gold), var(--accent), transparent);
+      border-radius: 20px 20px 0 0;
+      opacity: 0.8;
+    }
+    .host-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 20%; right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(28,144,224,0.3), transparent);
     }
 
+    /* ── Header ── */
     .host-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .host-title {
-      font-size: 20px;
-      font-weight: 700;
+      font-family: 'Orbitron', monospace;
+      font-size: 18px;
+      font-weight: 900;
       color: var(--text-primary);
-      letter-spacing: 0.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(28,144,224,0.3);
     }
 
     .host-fw {
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 600;
       color: var(--text-secondary);
-      margin-bottom: 4px;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
     }
-
     .host-fw span {
-      color: var(--text-muted);
+      color: var(--accent-light);
+      font-weight: 700;
     }
 
     .host-credits {
       font-size: 10px;
       color: var(--text-muted);
-      margin-bottom: 20px;
-      line-height: 1.4;
+      margin-top: 4px;
+      line-height: 1.5;
+      max-width: 420px;
     }
 
+    /* ── 3D Badge ── */
     .auto-badge {
-      background: linear-gradient(135deg, #0d2137, #132d45);
-      border: 1px solid #1c4a6a;
-      border-radius: 10px;
-      padding: 12px 20px;
+      background: linear-gradient(145deg, #0d1f35, #0a1628);
+      border: 1px solid rgba(28,144,224,0.3);
+      border-radius: 12px;
+      padding: 14px 22px;
       text-align: center;
-      min-width: 160px;
+      min-width: 170px;
+      transform: translateZ(20px);
+      box-shadow:
+        0 4px 0 rgba(0,0,0,0.4),
+        0 8px 20px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .auto-badge::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(28,144,224,0.05), transparent, rgba(255,215,64,0.03), transparent);
+      animation: badgeSpin 8s linear infinite;
+    }
+    @keyframes badgeSpin {
+      to { transform: rotate(360deg); }
     }
 
     .auto-badge-label {
-      font-size: 10px;
+      font-family: 'Orbitron', monospace;
+      font-size: 9px;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      position: relative;
     }
-
     .auto-badge-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--accent);
-      letter-spacing: 1px;
+      font-family: 'Orbitron', monospace;
+      font-size: 17px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      position: relative;
     }
-
     .auto-badge-version {
       font-size: 11px;
       color: var(--text-muted);
+      margin-top: 2px;
+      position: relative;
     }
 
+    /* ── 3D Steps ── */
     .steps-container {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 30px 0 28px;
+      margin: 32px 0 28px;
       position: relative;
+      perspective: 600px;
     }
 
     .step-line {
       position: absolute;
-      top: 20px;
+      top: 22px;
       left: 80px;
       right: 80px;
-      height: 3px;
+      height: 4px;
       background: var(--step-inactive);
+      border-radius: 2px;
       z-index: 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+      overflow: hidden;
     }
-
     .step-line-progress {
       height: 100%;
       width: 0%;
-      background: var(--green);
-      transition: width 0.8s ease;
+      background: linear-gradient(90deg, var(--green), var(--accent));
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
       border-radius: 2px;
+      box-shadow: 0 0 12px var(--green-glow);
     }
 
     .step {
@@ -139,67 +240,98 @@
     }
 
     .step-circle {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-family: 'Orbitron', monospace;
+      font-size: 15px;
       font-weight: 700;
-      margin-bottom: 8px;
-      transition: all 0.4s ease;
+      margin-bottom: 10px;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: translateZ(10px);
     }
 
     .step-circle.done {
-      background: var(--green);
+      background: linear-gradient(145deg, #00c864, #00a855);
       color: #fff;
-      box-shadow: 0 0 16px var(--green-glow);
+      box-shadow:
+        0 4px 0 rgba(0,0,0,0.3),
+        0 8px 20px var(--green-glow),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      transform: translateZ(15px) scale(1.05);
     }
 
     .step-circle.active {
-      background: var(--step-active);
+      background: linear-gradient(145deg, #2aa0e8, #1878c0);
       color: #fff;
-      box-shadow: 0 0 16px var(--accent-glow);
-      animation: pulse 1.5s infinite;
+      box-shadow:
+        0 4px 0 rgba(0,0,0,0.3),
+        0 8px 25px var(--accent-glow),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      animation: pulse3d 1.5s infinite;
+      transform: translateZ(20px);
     }
 
     .step-circle.pending {
-      background: var(--step-inactive);
+      background: linear-gradient(145deg, #0f1d30, #0a1420);
       color: var(--text-muted);
-      border: 2px solid #253545;
+      border: 2px solid #1a2d45;
+      box-shadow:
+        0 2px 0 rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+      transform: translateZ(5px);
+    }
+
+    @keyframes pulse3d {
+      0%, 100% {
+        box-shadow: 0 4px 0 rgba(0,0,0,0.3), 0 8px 25px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.2);
+        transform: translateZ(20px) scale(1);
+      }
+      50% {
+        box-shadow: 0 4px 0 rgba(0,0,0,0.3), 0 12px 35px rgba(28,144,224,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+        transform: translateZ(25px) scale(1.08);
+      }
     }
 
     .step-label {
-      font-size: 11px;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       color: var(--text-secondary);
     }
-
     .step-sublabel {
       font-size: 10px;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 3px;
+      font-weight: 500;
     }
 
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 16px var(--accent-glow); }
-      50% { box-shadow: 0 0 28px rgba(28, 144, 224, 0.35); }
-    }
-
+    /* ── 3D Status Panel ── */
     .status-panel {
       display: none;
-      background: #0d1a28;
-      border: 1px solid #1a3045;
-      border-radius: 12px;
-      padding: 24px 28px;
+      background: linear-gradient(145deg, rgba(8,16,30,0.95), rgba(5,10,20,0.95));
+      border: 1px solid rgba(28,144,224,0.15);
+      border-radius: 14px;
+      padding: 26px 30px;
       margin-top: 8px;
+      transform: translateZ(8px);
+      box-shadow:
+        0 4px 0 rgba(0,0,0,0.3),
+        0 12px 30px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.04);
     }
-
     .status-panel.active {
       display: block;
+      animation: panelSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes panelSlideIn {
+      from { opacity: 0; transform: translateZ(-10px) translateY(10px); }
+      to { opacity: 1; transform: translateZ(8px) translateY(0); }
     }
 
     .status-row {
@@ -208,123 +340,175 @@
       gap: 16px;
       margin-bottom: 16px;
     }
-
     .status-label {
-      font-size: 11px;
-      font-weight: 600;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
+      letter-spacing: 2px;
+      color: var(--accent);
     }
-
     .status-main {
-      font-size: 28px;
-      font-weight: 800;
+      font-family: 'Orbitron', monospace;
+      font-size: 26px;
+      font-weight: 900;
       color: var(--text-primary);
-      line-height: 1;
+      line-height: 1.1;
+      text-shadow: 0 0 20px rgba(28,144,224,0.2);
     }
-
     .status-sub {
       font-size: 13px;
       color: var(--text-secondary);
-      margin-top: 4px;
+      margin-top: 6px;
+      line-height: 1.4;
     }
 
     .fw-display {
       text-align: right;
       flex: 1;
     }
-
     .fw-number {
-      font-size: 42px;
-      font-weight: 800;
-      color: var(--text-primary);
+      font-family: 'Orbitron', monospace;
+      font-size: 40px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       line-height: 1;
+      text-shadow: none;
     }
-
     .fw-support {
       font-size: 12px;
       color: var(--text-secondary);
-      margin-top: 4px;
+      margin-top: 6px;
     }
-
-    .fw-support span {
-      color: var(--text-muted);
-    }
+    .fw-support span { color: var(--text-muted); }
 
     .status-bottom {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       font-size: 12px;
       color: var(--text-secondary);
     }
-
     .status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
       background: var(--green);
-      animation: blink 1.5s infinite;
+      box-shadow: 0 0 8px var(--green-glow);
+      animation: blink3d 1.5s infinite;
+    }
+    @keyframes blink3d {
+      0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green-glow); }
+      50% { opacity: 0.4; box-shadow: 0 0 3px var(--green-glow); }
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
+    /* ── Footer ── */
     .host-footer {
       text-align: center;
-      margin-top: 20px;
-      font-size: 11px;
+      margin-top: 22px;
+      font-family: 'Orbitron', monospace;
+      font-size: 10px;
       color: var(--text-muted);
-      letter-spacing: 0.3px;
-    }
-
-    .btn-run {
-      display: block;
-      width: 100%;
-      padding: 18px;
-      margin-top: 20px;
-      background: linear-gradient(135deg, #0d2137, #132d45);
-      border: 1px solid #1c4a6a;
-      border-radius: 12px;
-      color: var(--accent);
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .btn-run:hover {
-      background: linear-gradient(135deg, #132d45, #1a3d5a);
-      border-color: #2a6a9a;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
-    .btn-run:active {
-      transform: scale(0.98);
     }
 
     .hidden { display: none !important; }
+
+    /* ── Loading shimmer ── */
+    .shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(28,144,224,0.06), transparent);
+      animation: shimmerMove 3s infinite;
+    }
+    @keyframes shimmerMove {
+      to { left: 100%; }
+    }
+
+    /* ── Countdown overlay ── */
+    .countdown-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at center, rgba(2,5,16,0.85), rgba(2,5,16,0.97));
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    .countdown-overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .countdown-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 120px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      animation: countPulse 1s ease-in-out infinite;
+      filter: drop-shadow(0 0 40px rgba(28,144,224,0.4));
+    }
+    .countdown-text {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      color: var(--text-secondary);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-top: 20px;
+    }
+    @keyframes countPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* ── Grid lines bg decoration ── */
+    .grid-bg {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        linear-gradient(rgba(28,144,224,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(28,144,224,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
-  <div class="host-card">
+  <div class="grid-bg"></div>
+
+  <!-- Countdown Overlay -->
+  <div class="countdown-overlay" id="countdownOverlay">
+    <div class="countdown-number" id="countdownNum">3</div>
+    <div class="countdown-text">Starting Exploit...</div>
+  </div>
+
+  <div class="host-card" id="hostCard">
     <div class="host-header">
       <div>
-        <div class="host-title">PS5 / WEBKIT + SLOPKIT + PLDMGR</div>
+        <div class="host-title">PS5 / WebKit + SlopKit + PLDMGR</div>
         <div class="host-fw">FIRMWARES COMPATIVEIS: <span>9.00 - 12.00</span></div>
         <div class="host-credits">
           Credits: Jordy, Egy, Sonic, Yenyen, Zeco, Gezine, EchoStretch, Ufm42, TheFloW,
           John Tornblom, Flatz, Idlesauce, PS5 R&amp;D Discord, Ahlawy-Store
         </div>
       </div>
-      <div class="auto-badge">
+      <div class="auto-badge shimmer">
         <div class="auto-badge-label">HOST AHLAWY</div>
         <div class="auto-badge-title">AUTOMATICO</div>
         <div class="auto-badge-version">versao 1.0.0</div>
@@ -376,12 +560,8 @@
     </div>
 
     <div class="host-footer">
-      PLDMGR SERA CARREGADO AUTOMATICAMENTE
+      EXPLOIT INICIANDO AUTOMATICAMENTE
     </div>
-
-    <a class="btn-run" id="btnRun" href="#" onclick="startExploit(); return false;">
-      AHLAWY-STORE AUTOMATICO
-    </a>
   </div>
 
   <script>
@@ -462,9 +642,7 @@
             setStepSub(3, 'CONCLUIDO');
             updateProgress();
             showStatus('EXPLOIT CONCLUIDO', 'Jailbreak Completo!', 'Todos os stages concluidos com sucesso.', 'ELF loader ativo na porta 9021');
-            document.getElementById('btnRun').textContent = 'ENVIAR PAYLOAD';
-            document.getElementById('btnRun').href = 'slopkit/poops.html?go=1&auto=1&production=1&trigger=netcontrol&attempts=8&only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&log=debug&payload=1&v=final';
-            isRunning = false;
+            window.location.href = 'slopkit/poops.html?go=1&auto=1&production=1&trigger=netcontrol&attempts=8&only=ps0_preflight,ps1_prepare,ps3_stage0,ps4_validate,ps5_stage1,ps6_stage2,ps8_stage3,ps9_stage4,ps10_stage5&log=debug&payload=1&v=final';
           }, 2000);
         }
       }
@@ -476,7 +654,6 @@
       if (isRunning) return;
       isRunning = true;
 
-      document.getElementById('btnRun').textContent = 'EXECUTANDO...';
       document.getElementById('stepsContainer').style.display = 'flex';
       document.getElementById('statusPanel').classList.add('active');
 
@@ -484,7 +661,28 @@
       animateSteps();
     }
 
+    function runCountdown() {
+      var overlay = document.getElementById('countdownOverlay');
+      var numEl = document.getElementById('countdownNum');
+      overlay.classList.add('visible');
+
+      var count = 3;
+      numEl.textContent = count;
+
+      var timer = setInterval(function() {
+        count--;
+        if (count > 0) {
+          numEl.textContent = count;
+        } else {
+          clearInterval(timer);
+          overlay.classList.remove('visible');
+          setTimeout(function() { startExploit(); }, 400);
+        }
+      }, 1000);
+    }
+
     detectFirmware();
+    setTimeout(runCountdown, 3000);
   </script>
 </body>
 </html>
